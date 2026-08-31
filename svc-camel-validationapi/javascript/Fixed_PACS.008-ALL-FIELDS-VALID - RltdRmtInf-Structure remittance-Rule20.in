@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="windows-1252"?>
+<AppHdr xmlns="urn:iso:std:iso:20022:tech:xsd:head.001.001.02">
+	<Fr>
+		<FIId>
+			<FinInstnId>
+				<BICFI>DNIBNL2GXXX</BICFI>
+			</FinInstnId>
+		</FIId>
+	</Fr>
+	<To>
+		<FIId>
+			<FinInstnId>
+				<BICFI>LOYDGB21002</BICFI>
+			</FinInstnId>
+		</FIId>
+	</To>
+	<BizMsgIdr>P8RLTDRMT1</BizMsgIdr>
+	<MsgDefIdr>pacs.008.001.08</MsgDefIdr>
+	<BizSvc>swift.cbprplus.04</BizSvc>
+	<CreDt>2019-08-12T12:59:26+01:00</CreDt>
+</AppHdr>
+<Document xmlns="urn:iso:std:iso:20022:tech:xsd:pacs.008.001.08">
+	<FIToFICstmrCdtTrf>
+		<GrpHdr>
+			<MsgId>P8RLTDRMT1</MsgId>
+			<CreDtTm>2019-08-12T12:59:26+01:00</CreDtTm>
+			<NbOfTxs>1</NbOfTxs>
+			<SttlmInf>
+				<SttlmMtd>INGA</SttlmMtd>
+			</SttlmInf>
+		</GrpHdr>
+		<CdtTrfTxInf>
+			<PmtId>
+				<InstrId>P8RLTDRMT1</InstrId>
+				<EndToEndId>P8RLTDRMT1</EndToEndId>
+				<UETR>8a562c67-ca16-48ba-b074-65581be6f011</UETR>
+			</PmtId>
+			<IntrBkSttlmAmt Ccy="USD">809.71</IntrBkSttlmAmt>
+			<IntrBkSttlmDt>2026-08-11</IntrBkSttlmDt>
+			<InstdAmt Ccy="USD">809.71</InstdAmt>
+			<ChrgBr>SHAR</ChrgBr>
+			<PrvsInstgAgt1>
+				<FinInstnId>
+					<Nm>First Payment Relay Bank</Nm>
+					<PstlAdr>
+						<StrtNm>Church Street</StrtNm>
+						<BldgNb>10</BldgNb>
+						<PstCd>560001</PstCd>
+						<TwnNm>Bangalore</TwnNm>
+						<Ctry>IN</Ctry>
+						<AdrLine>5th Floor, Tower A</AdrLine>
+						<AdrLine>Opp. Metro Station, Gate 2</AdrLine>
+					</PstlAdr>
+				</FinInstnId>
+			</PrvsInstgAgt1>
+			<PrvsInstgAgt1Acct>
+				<Id>
+					<IBAN>FR1420041010050500013M02606</IBAN>
+				</Id>
+			</PrvsInstgAgt1Acct>
+			<PrvsInstgAgt2>
+				<FinInstnId>
+					<Nm>First Payment Relay Bank</Nm>
+					<PstlAdr>
+						<StrtNm>Church Street</StrtNm>
+						<BldgNb>10</BldgNb>
+						<PstCd>560001</PstCd>
+						<TwnNm>Bangalore</TwnNm>
+						<Ctry>IN</Ctry>
+						<AdrLine>5th Floor, Tower A</AdrLine>
+						<AdrLine>Opp. Metro Station, Gate 2</AdrLine>
+					</PstlAdr>
+				</FinInstnId>
+			</PrvsInstgAgt2>
+			<PrvsInstgAgt2Acct>
+				<Id>
+					<IBAN>FR1420041010050500013M02606</IBAN>
+				</Id>
+			</PrvsInstgAgt2Acct>
+			<PrvsInstgAgt3>
+				<FinInstnId>
+					<Nm>First Payment Relay Bank</Nm>
+					<PstlAdr>
+						<StrtNm>Church Street</StrtNm>
+						<BldgNb>10</BldgNb>
+						<PstCd>560001</PstCd>
+						<TwnNm>Bangalore</TwnNm>
+						<Ctry>IN</Ctry>
+						<AdrLine>5th Floor, Tower A</AdrLine>
+						<AdrLine>Opp. Metro Station, Gate 2</AdrLine>
+					</PstlAdr>
+				</FinInstnId>
+			</PrvsInstgAgt3>
+			<PrvsInstgAgt3Acct>
+				<Id>
+					<IBAN>FR1420041010050500013M02606</IBAN>
+				</Id>
+			</PrvsInstgAgt3Acct>
+			<InstgAgt>
+				<FinInstnId>
+					<BICFI>DNIBNL2GXXX</BICFI>
+				</FinInstnId>
+			</InstgAgt>
+			<InstdAgt>
+				<FinInstnId>
+					<BICFI>LOYDGB21002</BICFI>
+				</FinInstnId>
+			</InstdAgt>
+			<IntrmyAgt1>
+				<FinInstnId>
+					<Nm>First Intermediary Bank</Nm>
+					<PstlAdr>
+						<Dept>International Transfers</Dept>
+						<StrtNm>MG Road</StrtNm>
+						<BldgNb>45B</BldgNb>
+						<TwnNm>Pune</TwnNm>
+						<Ctry>IN</Ctry>
+						<AdrLine>Global Payment Hub</AdrLine>
+						<AdrLine>Floor 3, ABC Complex</AdrLine>
+					</PstlAdr>
+				</FinInstnId>
+			</IntrmyAgt1>
+			<IntrmyAgt2>
+				<FinInstnId>
+					<Nm>Second Intermediary Bank</Nm>
+					<PstlAdr>
+						<TwnNm>Delhi</TwnNm>
+						<Ctry>IN</Ctry>
+						<AdrLine>Global Payment Hub</AdrLine>
+						<AdrLine>Floor 3, ABC Complex</AdrLine>
+					</PstlAdr>
+				</FinInstnId>
+			</IntrmyAgt2>
+			<IntrmyAgt3>
+				<FinInstnId>
+					<Nm>Third Intermediary Bank</Nm>
+					<PstlAdr>
+						<TwnNm>Mumbai</TwnNm>
+						<Ctry>IN</Ctry>
+						<AdrLine>123 First Avenue</AdrLine>
+						<AdrLine>Andheri East</AdrLine>
+					</PstlAdr>
+				</FinInstnId>
+			</IntrmyAgt3>
+			<UltmtDbtr>
+				<Nm>Rony Dsouza</Nm>
+				<PstlAdr>
+					<StrtNm>Global Tech Park</StrtNm>
+					<BldgNb>5</BldgNb>
+					<TwnNm>Noida</TwnNm>
+					<Ctry>IN</Ctry>
+					<AdrLine>5th Floor, Tower A</AdrLine>
+					<AdrLine>Opp. Metro Station, Gate 2</AdrLine>
+				</PstlAdr>
+			</UltmtDbtr>
+			<Dbtr>
+				<Nm>ABC Corporation</Nm>
+				<PstlAdr>
+					<StrtNm>Times Square</StrtNm>
+					<BldgNb>7</BldgNb>
+					<PstCd>NY 10036</PstCd>
+					<TwnNm>New York</TwnNm>
+					<Ctry>US</Ctry>
+					<AdrLine>5th Floor, Tower A</AdrLine>
+					<AdrLine>Opp. Metro Station, Gate 2</AdrLine>
+				</PstlAdr>
+			</Dbtr>
+			<DbtrAcct>
+				<Id>
+					<Othr>
+						<Id>1234568400</Id>
+					</Othr>
+				</Id>
+			</DbtrAcct>
+			<DbtrAgt>
+				<FinInstnId>
+					<BICFI>DNIBNL2GXXX</BICFI>
+					<Nm>HDFC Bank Ltd</Nm>
+					<PstlAdr>
+						<StrtNm>Senapati Bapat Marg</StrtNm>
+						<BldgNb>101</BldgNb>
+						<PstCd>400013</PstCd>
+						<TwnNm>Mumbai</TwnNm>
+						<Ctry>IN</Ctry>
+						<AdrLine>5th Floor, Tower A</AdrLine>
+						<AdrLine>Opp. Metro Station, Gate 2</AdrLine>
+					</PstlAdr>
+				</FinInstnId>
+			</DbtrAgt>
+			<CdtrAgt>
+				<FinInstnId>
+					<BICFI>ICICINBBXXX</BICFI>
+					<Nm>ICICI Bank Ltd</Nm>
+					<PstlAdr>
+						<StrtNm>Bandra Kurla Complex</StrtNm>
+						<BldgNb>601</BldgNb>
+						<PstCd>400051</PstCd>
+						<TwnNm>Mumbai</TwnNm>
+						<Ctry>IN</Ctry>
+						<AdrLine>5th Floor, Tower A</AdrLine>
+						<AdrLine>Opp. Metro Station, Gate 2</AdrLine>
+					</PstlAdr>
+				</FinInstnId>
+			</CdtrAgt>
+			<Cdtr>
+				<Nm>MICHAEL GEORGE</Nm>
+				<PstlAdr>
+					<StrtNm>Mark Lane</StrtNm>
+					<BldgNb>55</BldgNb>
+					<PstCd>EC3R7NE</PstCd>
+					<TwnNm>London</TwnNm>
+					<Ctry>GB</Ctry>
+					<AdrLine>5th Floor, Tower A</AdrLine>
+					<AdrLine>Opp. Metro Station, Gate 2</AdrLine>
+				</PstlAdr>
+			</Cdtr>
+			<CdtrAcct>
+				<Id>
+					<IBAN>GB29NWBK60161331926819</IBAN>
+				</Id>
+			</CdtrAcct>
+			<UltmtCdtr>
+				<Nm>Anjali M. Verma</Nm>
+				<PstlAdr>
+					<StrtNm>Lotus Tech Park</StrtNm>
+					<BldgNb>7</BldgNb>
+					<PstCd>400059</PstCd>
+					<TwnNm>Mumbai</TwnNm>
+					<Ctry>IN</Ctry>
+					<AdrLine>Office No. 701, Tower C</AdrLine>
+					<AdrLine>Near Western Express Highway</AdrLine>
+				</PstlAdr>
+			</UltmtCdtr>
+			<RltdRmtInf>
+				<RmtId>SYNTH-RMTADV-0001</RmtId>
+				<RmtLctnDtls>
+					<Mtd>EMAL</Mtd>
+					<ElctrncAdr>remittance-advice</ElctrncAdr>
+				</RmtLctnDtls>
+			</RltdRmtInf>
+			<RmtInf>
+				<Strd>
+					<CdtrRefInf>
+						<Tp>
+							<CdOrPrtry>
+								<Cd>SCOR</Cd>
+							</CdOrPrtry>
+						</Tp>
+						<Ref>RF18539007547034</Ref>
+					</CdtrRefInf>
+				</Strd>
+			</RmtInf>
+		</CdtTrfTxInf>
+	</FIToFICstmrCdtTrf>
+</Document>
