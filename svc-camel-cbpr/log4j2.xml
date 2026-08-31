@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+	
+	<Appenders>
+		<RollingFile name="logFile"
+			fileName="E:/Pelican_Install_Dir/Pelican/ace.pelican/log/svc-camel-cbpr_${date:yyMMdd}.log"
+			filePattern="E:/Pelican_Install_Dir/Pelican/ace.pelican/log/svc-camel-cbpr-%d{.yyyyMMdd}-%i.log">
+			<LevelRangeFilter minLevel="WARN" maxLevel="WARN" onMatch="DENY" onMismatch="NEUTRAL"/>
+			<PatternLayout>
+				<Pattern>[%d{dd.MM.yyyy HH:mm:ss.SSS}][%-5p][%-10t][%-10c{1}][%M] :	%m%n</Pattern>
+			</PatternLayout>
+			<Policies>
+				<TimeBasedTriggeringPolicy interval="1"
+					modulate="true" />
+				<SizeBasedTriggeringPolicy size="250MB" />
+			</Policies>
+			<!--<DirectWriteRolloverStrategy maxFiles="10"/> -->
+		</RollingFile>
+
+		<!--For trace, Uncomment this RollingFile tag part -->
+		<!-- <RollingFile name="traceFile"
+			fileName="E:/Pelican_Install_Dir/Pelican/ace.pelican/trace/svc-camel-cbpr_${date:yyMMdd}.trc"
+			filePattern="E:/Pelican_Install_Dir/Pelican/ace.pelican/trace/svc-camel-cbpr-%d{.yyyyMMdd}-%i.trc">
+			<PatternLayout>
+				<Pattern>[%d{dd.MM.yyyy HH:mm:ss.SSS}][%-5p][%-10t][%-10c{1}][%M] :	%m%n</Pattern>
+			</PatternLayout>
+			<SizeBasedTriggeringPolicy size="250MB" />
+		</RollingFile> -->
+
+	</Appenders>
+	
+	<Loggers>
+		<Root level="trace">
+			<AppenderRef ref="logFile" level="info"/>
+			<!--For trace, Uncomment this part-->
+			<!-- <AppenderRef ref="traceFile" /> -->
+		</Root>
+	</Loggers>
+
+</Configuration>

@@ -1,0 +1,318 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+
+    <routeContext id="main2" xmlns="http://camel.apache.org/schema/spring">
+	
+	<route id="licensepulse" startupOrder="1" autoStartup="true">
+			<from uri="timer://licensepulseTrigger?fixedRate=true&amp;period=15000" />
+		<log loggingLevel="DEBUG" message="License Check" />
+		<bean ref="licensePulse" method="start" />
+	</route>
+	
+	<route id="_pel_mainRoute" startupOrder="2" autoStartup="true">
+		<from
+			uri="timer://mainRouteTimer2?fixedRate=true&amp;period=30000" />
+		<bean ref="staticDataMaps" method="getCompletedFlag" />
+		<choice>
+			<when>
+				<simple>${header.completedFlag} == true</simple>
+				<bean ref="pelicanController" method="startRoutes" />
+				<log loggingLevel="DEBUG" message="Startup activity completed.." />
+			</when>
+			<otherwise>
+				<log loggingLevel="INFO" message="Hazelcast data not loaded, waiting..." />
+			</otherwise>
+		</choice>
+	</route>
+	
+	<route id="mainRouterPacs008" startupOrder="3" autoStartup="false">
+		<!-- <from uri ="sql:select * from MSGDB m, MSGDB_FILE f where m.MSGDB_ID = f.MSGDB_ID AND m.QUEUEID = 'CFCTOBFQ' and m.STATUS = '69'" />-->
+		<from uri = "sql:select * from MSGDB where QUEUEID in ('CFCTOBFQ', 'CFCTINFQ') AND STATUS = '69'" />
+		<!--<from uri="file:D:\\eclipse-workspace\\CamelTest1\\fileinput?move=.done\${file:name.noext}_${date:now:yyyyMMddhhmmss}" />-->
+		<log loggingLevel="INFO" message="Pacs008 mainRouter starts" />
+		<!-- <setHeader headerName="PLCN_onAggregationCompletionFunction">
+				<simple>calculateFileBatchTotal</simple>
+		</setHeader> -->
+		<split streaming = "true" stopOnException="true" parallelProcessing="true">
+			<simple>${body}</simple>
+			<setHeader headerName="IdempotentKey">
+				<simple>${body[MSGDB_ID]}</simple>
+			</setHeader>
+			<idempotentConsumer skipDuplicate="true" messageIdRepositoryRef="idempotentRepoHazelSepa" >
+				<header>IdempotentKey</header>
+				<bean id="readData" ref="SplitterHelper" method="readMsgdb"/>
+				<!-- <to uri = "sql:select * from MSGDB_FILE where MSGDB_ID = :#${header.MSGDBID}"/> -->
+				<to uri = "sql:select f.* from MSGDB_FILE f Left Join MSGDB m on f.msgdb_id = m.msgdb_id where m.QUEUEID in ('CFCTOBFQ', 'CFCTINFQ') AND m.STATUS = '69' AND m.MSGDB_ID= :#${header.MSGDBID}"/>
+				<bean id="readData1" ref="SplitterHelper" method="readMsgdbFile"/>
+				<to uri="sql-stored:ONROLLBACK_CLEANUP(INTEGER ${header.MSGDBID})"/>
+				<choice>
+					<when>
+						<simple>${header.PLCN_emptyFileRecord} == 'true'</simple>
+						<log loggingLevel="INFO" message="inside body null, Ending main route" />
+					</when>
+					<otherwise>
+						<setHeader headerName="processingFlag">
+							<simple>true</simple>
+						</setHeader>
+						<to uri="direct://pacs008-splitter" />
+					</otherwise>
+				</choice>
+				<!-- <bean id="readData" ref="SplitterHelper" method="readData"/> -->
+				<!-- <to uri="direct://pacs008-splitter" /> -->
+		</idempotentConsumer>
+		</split>
+	</route>
+	
+	<route id="pacs008-splitter" >
+		<from uri ="direct://pacs008-splitter" />
+		<!-- <bean id="readData" ref="SplitterHelper" method="readData"/> -->
+		<log loggingLevel="TRACE" message="Headers after readData ${headers}." />
+		<setHeader headerName="Location">
+				<simple>E:/Interfac/Pelican/ace.pelican/files/repository/in</simple>
+			</setHeader>
+		<log loggingLevel="INFO" message="Before pollEnrich Headers: ${headers}" />
+		<pollEnrich timeout="10000">
+			<!--<simple>file:D:\\Interface\\ace.pelican\\files\\repository\\in?fileName=OB.PACS008-AFTERFINAL_VY01.F00001497757.xml</simple>-->
+			<simple>file:${header.Location}?fileName=${header.PLCN_Filename}&amp;noop=true&amp;idempotent=false</simple>
+			<!-- <constant>file:D:\eclipse-workspace\CamelTest1\fileinput?fileName=${header.PLCN_Filename}</constant>
+			<simple>file:Administrator@172.16.11.104:21/d$/Interface/ace.pelican/files/repository/in?fileName=${header.PLCN_Filename}</simple> -->
+		</pollEnrich>
+		<bean id="readFile" ref="SplitterHelper" method="setData"/>
+		<setHeader headerName="PLCN_onAggregationCompletionFunction">
+			<simple>calculateFileBatchTotal</simple>
+		</setHeader>
+		<setHeader headerName="prefix">
+			<simple>Pacs008</simple>
+		</setHeader>
+		<bean id="ResetAggregationRepository" ref="PelicanMemoryAggregationRepository" method="clearRepository" />
+		<bean ref="hashValidation" method="validateFileMessage" />
+		<bean id="addFileDebulkData1" ref="FileDebulkController" method="addFileDebulkData" />
+		<!-- <to uri="direct://dbRoute1" /> -->
+		<bean id="jspPopulationDatacustomValidations" ref="jspExecute" 
+						method="executeWithHazelCastInstance(${exchange},customValidations)" />
+		<choice>
+			<when>
+				<simple>${header.PLCN_validFlag} == true</simple>
+				<split streaming="true" stopOnException="true" parallelProcessing="true">
+					<method ref="Pacs008Iterator" method="split(${exchange})" />
+					<bean id="setMessageDetails1" ref="FileDebulkController" method="setMessageDetails" />
+					<bean id="setMessage" ref="SplitterHelper" method="createDocumentPacs008(${exchange})"/>
+					<!-- <log loggingLevel="INFO" message="body inside splitter route ${body}." />
+					<log loggingLevel="TRACE" message="Headers inside splitter ${headers}." /> -->
+					<setHeader headerName="PLCN_flag">
+						<simple>true</simple>
+					</setHeader>
+					<setHeader headerName="fileFlag">
+						<simple>true</simple>
+					</setHeader>
+					<log message="Split router done" />
+					<to uri="direct://processingRoute" />
+					<!-- <log loggingLevel="TRACE" message="Headers after processing route ${headers}." /> -->
+				</split>
+				<log loggingLevel="TRACE" message="Headers after split end ${headers}." />
+				<bean id="jspPopulationDatacheckRejectFlag" ref="jspExecute" 
+					method="executeWithHazelCastInstance(${exchange},checkRejectFlag)" />
+				<to uri="direct:second-phase-commit"/>
+			</when>
+			<otherwise>
+				<to uri="direct:second-phase-commit"/>
+			</otherwise>
+		</choice>		
+		<log message="File Splitting Done" />
+	</route>
+	
+	
+	<route id="processingRoute" autoStartup="false" streamCache="true">
+		<from uri="direct://processingRoute" />
+		<log message="In processing Route" />
+		<!-- <log loggingLevel="TRACE" message="Headers inside processing route ${headers}." /> -->
+		<to uri="direct://dbRoute1" />
+		<!-- <log loggingLevel="INFO" message="body inside processing route ${body}." /> -->
+		<log message="Before validateRoute" />
+		<to uri="direct://validateRoute" />
+		<log message="After validateRoute" />
+		<!-- <log loggingLevel="TRACE" message="Headers after validate route ${headers}." /> -->
+		<to uri="direct://dbOperationSepaTxn" />
+		<!-- <log loggingLevel="TRACE" message="Headers after dbOperationSepaTxn rule. ${headers}." /> -->
+		<to uri="direct://aggregate-debulk" />
+	</route>
+	
+	
+	<route id="aggregate-debulk">
+		<from uri="direct:aggregate-debulk" />
+		<!-- <log loggingLevel="TRACE" message="Headers inside Aggregation route: ${headers}" /> -->
+		<aggregate strategyRef="FileDebulkAggregationStrategy" aggregationRepositoryRef="PelicanMemoryAggregationRepository">
+			<correlationExpression>
+				<header>Plcn_FileCorrelationId</header>
+			</correlationExpression>
+			<completionPredicate>
+				<simple>${header.Plcn_FileBatchComplete} == '1'</simple>
+			</completionPredicate>
+			<log message="Aggregation Batch Ready" />
+			<bean id="FileDebulkAggregationCompletion" ref="FileDebulkAggregationCompletion" method="onCompletion" />
+			<bean id="jspPopulationDatasetRejectFileFlag" ref="jspExecute" 
+						method="executeWithHazelCastInstance(${exchange},setRejectFileFlag)" />
+			<!-- Calling BI JS -->
+			<choice>
+				<when>
+					<simple>${header.PLCN_rejectFileFlag} == "true"</simple>
+					<log loggingLevel="INFO" message="Number of invalid txns breaches threshold configuration." />
+					<stop/>
+				</when>
+				<otherwise>
+					<to uri="direct://txn-batch-insert" />
+				</otherwise>	
+			</choice>
+			<!-- <to uri="direct://txn-batch-insert" /> -->
+		</aggregate>
+	</route>
+	
+	<route id ="txn-batch-insert">
+		<from uri="direct://txn-batch-insert"/>
+		<log loggingLevel="INFO" message="Inside batch-insert sub-route" />
+		<!-- <setHeader headerName="Plcn_BatchFlag">
+			<constant>true</constant>
+		</setHeader> -->
+		<!-- <log loggingLevel="TRACE" message="Headers before dbOperationSepaTxn = ${headers}" /> -->
+		<!-- <to uri="aceq://endpointwrite?queueID=PROCDQ&amp;pollStatus=80" /> -->
+		<!-- <to uri="aceq://endpointwrite?queueID=TMPTXVWQ&amp;pollStatus=69&amp;batchFlag=true" /> -->
+		<toD uri="aceq://endpointwrite?queueID=${header.PLCN_ePQueueId}&amp;pollStatus=${header.PLCN_ePStatus}&amp;batchFlag=true" />
+		<to uri="genaudit://insertGenAudit?batchFlag=true" />
+		<bean ref="splitPacs004" method="clearList" />
+		<!-- <log loggingLevel="TRACE" message="Headers after dbOperationSepaTxn = ${headers}" /> -->
+		<log loggingLevel="INFO" message="Updated record in DB with QueueID=${header.PLCN_ePQueueId}and pollStatus=${header.PLCN_ePStatus}" />
+		<!-- Audit -->
+	</route>
+	
+	<route id="validateRoute">
+		<from uri="direct://validateRoute" />
+		<log loggingLevel="INFO" message="In Split Processor route.." />
+		<removeHeaders pattern="PLCN_orgMessage" />
+		<removeHeaders pattern="PLCNorgMessage" />
+		<removeHeaders pattern="inputMsgInString" />
+		<removeHeaders pattern="inputMsgAsFile" />
+		<!-- <log loggingLevel="TRACE" message="Headers Before validation service call ${headers}." /> -->
+		<!-- <setHeader headerName="PLCN_validMessage">
+			<constant>true</constant>
+		</setHeader> -->
+		<serviceCall 
+			name="validation-service/payments/v1/validation?headerFilterStrategy=#aceqFilter"	/>
+			<!-- <bean id="xmlParserValidateRoute" ref="xmlParser" /> -->
+			<to uri="direct://setOriginalBody" />
+			<bean id="xmlParserValidateRoute1" ref="xmlParser" />
+			<!-- <log loggingLevel="TRACE" message="Headers after validation service call ${headers}." /> -->	
+			<choice>
+				<when>
+					<simple>${header.PLCN_validMessage} == true</simple>
+					<bean id="jspPopulationDataruleGenerateKbJs2" ref="jspExecute" 
+						method="executeWithHazelCastInstance(${exchange},ruleGenerateKbJs2)" />
+					<bean id="jspPopulationDatarouteSetChannelFile" ref="jspExecute" 
+						method="executeWithHazelCastInstance(${exchange},routeSetChannelFile)" />
+					<bean id="jspPopulationDatarouteSetChannelBtch" ref="jspExecute" 
+						method="executeWithHazelCastInstance(${exchange},routeSetChannelBtch)" />
+					<bean id="jspPopulationDatarouteSetChannelTxn" ref="jspExecute" 
+						method="executeWithHazelCastInstance(${exchange},routeSetChannelTxn)" />
+					<log loggingLevel="TRACE" message="Headers after routeSetChannelTxn ${headers}." />	
+					<bean id="jspPopulationDataValidateAPI" ref="jspExecute" 
+						method="executeWithHazelCastInstance(${exchange},setRoutingHeader)" />	
+					<!-- <to uri="direct://setOriginalBody" /> -->
+				</when>
+				<otherwise>
+					<choice>
+						<when>
+							<simple>${header.PLCN_translationFlag} == true</simple>
+							<bean id="jspPopulationDatasetTranslationHeader" ref="jspExecute" 
+								method="executeWithHazelCastInstance(${exchange},setTranslationHeader)" />	
+							<serviceCall 
+								name="translation-service/payments/v1/Translation?headerFilterStrategy=#aceqFilter"	/>
+							<log loggingLevel="INFO" message="body after translation service call = ${body}" />	
+							<bean id="jspPopulationDataruleXtPacs002Values" ref="jspExecute" 
+								method="executeWithHazelCastInstance(${exchange},ruleXtPacs002Values)" />
+							<bean id="jspPopulationDataValidateAPI" ref="jspExecute" 
+									method="executeWithHazelCastInstance(${exchange},setRoutingHeader)" />	
+						</when>
+						<otherwise>
+							<bean id="jspPopulationDataValidateAPI" ref="jspExecute" 
+									method="executeWithHazelCastInstance(${exchange},setRoutingHeader)" />
+						</otherwise>
+					</choice>	
+				</otherwise>
+			</choice>	
+	</route>
+	
+	<route id="second-phase-commit">
+		<from uri="direct:second-phase-commit"/>
+		<choice>
+			<when>
+				<simple>${header.PLCN_rejectFileFlag} == "true"</simple>
+				<!--  ONERROR-->
+				<bean id="jspPopulateDatadbOperationSepaError" ref="jspExecute"
+					method="executeWithHazelCastInstance(${exchange},dbOperationSepaError)" />
+				<!-- <to uri = "sql:update MSGDB set QUEUEID = 'ERRORQ', STATUS = '69' where MSGDB_ID =:#${header.PLCN_twoPhaseCommitId} and STATUS = '66' " /> -->
+				<to uri = "sql:update MSGDB set QUEUEID = 'ERRFILEQ', STATUS = '69', COMMENTS =:#${header.PLCN_fileComments}, PROCESSING_STAGE =:#${header.PLCN_processingStage} where MSGDB_ID =:#${header.PLCN_twoPhaseCommitId} " />
+				<log loggingLevel="INFO" message="Updated records in DB with queueId = ERRFILEQ amd pollStatus=69" />	
+				<to uri="genaudit://insertGenAudit" />
+			</when>
+			<otherwise>
+			<!-- <ONSTREAMTRANSACTIONPHASETWOCOMMIT> Move the transactions to final available status and in where condition TWOPHASECOMMIT_ID = Unique File ID and STATUS = 52 -->
+			<!-- <log loggingLevel="TRACE" message="Headers Before dbOperationSepaFile rule ${headers}." /> -->
+			<to uri="direct://dbOperationSepaFile" />
+			<!-- <log loggingLevel="TRACE" message="Headers after dbOperationSepaFile rule ${headers}." /> -->
+			<toD uri="aceq://endpointwrite?queueID=${header.PLCN_fileQueueId}&amp;pollStatus=${header.PLCN_fileStatus}" />
+			<to uri="genaudit://insertGenAudit" />
+			<to uri = "sql:insert into MSGDB_COMMENTS (MSGDB_ID, MSGDB_ID_CHILD, STATUS,TWOPHASECOMMIT_ID, COMMENTS, RECORD_GROUP_TYPE, REFERENCE, SEQUENCENUM, INSTANCEID, OUTPUT_FILE_FLAG) values (:#${header.PLCN_fileMsgdbId},:#${header.PLCN_childId},'66',:#${header.PLCN_tCommitId},:#${header.PLCN_fileComments},:#${header.PLCN_recordGroupType},:#${header.PLCN_reference},:#${header.PLCN_seqNum},:#${header.PLCN_instanceId},:#${header.PLCN_outputFileFlag})" />
+			<!-- <to uri = "sql:insert into MSGDB_OUTPUT (MSGDB_ID, MDBOUT_MODE, MDBOUT_STATUS, INSTANCEID) values (:#${header.PLCN_fileMsgdbId},:#${header.PLCN_OutPutmode}, 'T', :#${header.PLCN_instanceId})" /> -->	
+			<log loggingLevel="INFO" message="Updated record in DB with QueueID=${header.PLCN_fileQueueId} and Status=${header.PLCN_fileStatus}" />
+			<bean id="jspPopulateDatadbOperationSepaTwoPhaseCommit" ref="jspExecute"
+				method="executeWithHazelCastInstance(${exchange},dbOperationSepaTwoPhaseCommit)" />
+			<to uri = "sql:update MSGDB set STATUS = '69' where STATUS = '66'and TWOPHASECOMMIT_ID =:#${header.PLCN_twoPhaseCommitId} " />
+			<to uri = "sql:update MSGDB_COMMENTS set STATUS = '69' where STATUS = '66'and TWOPHASECOMMIT_ID=:#${header.PLCN_twoPhaseCommitId} " />
+			<to uri = "sql:update MSGDB_OUTPUT set MDBOUT_STATUS = 'F' where MDBOUT_STATUS = 'T'and MDBOUT_MODE =:#${header.PLCN_OutPutmode} and INSTANCEID=:#${header.PLCN_instanceId} " />
+			<log loggingLevel="INFO" message="Updated records in DB with pollStatus=69}" />
+			</otherwise>
+		</choice>
+	</route>
+	
+	<route id="dbRoute1">
+		<from uri="direct://dbRoute1" />
+		<log loggingLevel="TRACE" message="Body in dbRoute = ${body}" />
+		<bean id="xmlParserDBRoute1" ref="xmlParser" />
+		<bean id="jspPopulateDataDBRoute1" ref="jspExecute"
+			method="executeWithHazelCastInstance(${exchange},populateMetaData2)" />
+		<!-- <bean id="jspPopulateDataEnrichIbanBic" ref="jspExecute"
+			method="executeWithHazelCastInstance(${exchange},enrichIbanBic)" /> -->
+	</route>
+	
+	<route id="dbOperationSepaTxn">
+		<from uri="direct://dbOperationSepaTxn" />
+		<!-- <log loggingLevel="TRACE" message="Body in dbOperationSepaTxn = ${body}" /> -->
+		<bean id="xmlParserdbOperationSepaTxn" ref="xmlParser" />
+		<!-- <log loggingLevel="INFO" message="before createResponse = ${body}" /> -->
+		<bean id="jspPopulateDataCreateRes2" ref="jspExecute"
+			method="executeWithHazelCastInstance(${exchange},createResponse)" />
+		<bean id="jspPopulateDatadbOperationSepaTxn" ref="jspExecute"
+			method="executeWithHazelCastInstance(${exchange},dbOperationSepaTxn)" />
+	</route>
+	
+	<route id="dbOperationSepaFile">
+		<from uri="direct://dbOperationSepaFile" />
+		<!-- <log loggingLevel="TRACE" message="Body in dbOperationSepaFile = ${body}" /> -->
+		<bean id="xmlParserdbOperationSepaFile" ref="xmlParser" />
+		<!-- <log loggingLevel="INFO" message="before createResponse = ${body}" /> -->
+		<!-- <bean id="jspPopulateDataCreateRes2" ref="jspExecute"
+			method="executeWithHazelCastInstance(${exchange},createResponse)" /> -->
+		<bean id="jspPopulateDatadbOperationSepaFile" ref="jspExecute"
+			method="executeWithHazelCastInstance(${exchange},dbOperationSepaFile)" />
+	</route>
+	
+	<route id="setOriginalBody">
+		<from uri="direct://setOriginalBody" />
+		<bean id="jspPopulationDataSetOriginalBody" ref="jspExecute" 
+			method="executeWithHazelCastInstance(${exchange},setOriginalBody)" />		
+	</route>
+	
+</routeContext>
+</beans>	

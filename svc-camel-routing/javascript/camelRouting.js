@@ -1,0 +1,1330 @@
+load('E:/Pelican_Install_Dir/Pelican/ace.solution.ppay/svc-camel-routing/javascript/pelicanxmlutility.js');
+load('E:/Pelican_Install_Dir/Pelican/ace.solution.ppay/svc-camel-routing/javascript/utility.js');
+load('E:/Pelican_Install_Dir/Pelican/ace.solution.ppay/svc-camel-routing/javascript/messageRepair.js');
+load('E:/Pelican_Install_Dir/Pelican/ace.solution.ppay/svc-camel-routing/javascript/authorizationCheck.js');
+
+var XPathConstants = Java.type('javax.xml.xpath.XPathConstants');
+var XPathFactory = Java.type('javax.xml.xpath.XPathFactory');
+var HashMap = Java.type('java.util.HashMap');
+var Entry = Java.type('java.util.Map.Entry');
+var BigDecimal = Java.type('java.math.BigDecimal');
+var JavaDate = Java.type('java.util.Date');
+var System = Java.type('java.lang.System');
+var ArrayList = Java.type("java.util.ArrayList");
+var DocumentBuilderFactory = Java.type("javax.xml.parsers.DocumentBuilderFactory");
+//var Logger = Java.type("org.apache.log4j.Logger");
+var Logger = Java.type("org.slf4j.Logger");
+var Logger = Java.type("org.slf4j.LoggerFactory");
+var logger = Logger.getLogger("JavaScript");
+var JSHelperClass = Java.type("ai.pelican.camel.utils.JSHelperClass");
+var EncryptDecrypt = Java.type("ai.pelican.camel.authentication.EncryptDecrypt");
+var TransformerFactory = Java.type('javax.xml.transform.TransformerFactory');
+var StringWriter = Java.type('java.io.StringWriter');
+var DOMSource = Java.type('javax.xml.transform.dom.DOMSource');
+var Transformer = Java.type("javax.xml.transform.Transformer");
+var OutputKeys = Java.type("javax.xml.transform.OutputKeys");
+var StreamResult = Java.type('javax.xml.transform.stream.StreamResult');
+var InterActFile = Java.type("ai.pelican.camel.interact.InterActFile");
+var AuthCodeGenerator = Java.type("ai.pelican.camel.authentication.AuthCodeGenerator");
+var AppHeaderHandler = Java.type("ai.pelican.camel.bah.AppHeaderHandler");
+var DocumentBuilder = Java.type("javax.xml.parsers.DocumentBuilder");
+var Document = Java.type("org.w3c.dom.Document");
+var StringReader = Java.type("java.io.StringReader");
+var InputSource = Java.type("org.xml.sax.InputSource");
+
+const getMethods = (obj) => {
+	let properties = new Set()
+	let currentObj = obj
+	do {
+		Object.getOwnPropertyNames(currentObj).map(item => properties.add(item))
+	} while ((currentObj = Object.getPrototypeOf(currentObj)))
+	var items = [...properties.keys()].filter(item => typeof obj[item] === 'function');
+
+
+	logger.trace("-------------- START --------------;")
+	logger.trace("-Funnctions--");
+	items.forEach(element => {
+		logger.trace(element);
+	});
+
+	logger.trace("--KEYS--");
+	var keys = obj.keySet();
+
+	keys.forEach(element => {
+		logger.trace(element + ": " + obj.get(element));
+	});
+
+	logger.trace("-------------- END --------------;")
+
+}
+
+/*
+**
+* This function extracts payload.
+* @param {CamelExchange} exchange - The exchange.
+*/
+function extractPayload(exchange) {
+	var inMsg = exchange.getIn();
+	var map = inMsg.getHeaders();
+	var receivedMsg = exchange.getIn().getBody(java.lang.String.class);
+
+	logger.info("extractPayload: receivedMsg = " + receivedMsg);
+
+	if (receivedMsg.contains("<Document")) {
+		//var payload = receivedMsg.substring(receivedMsg.indexOf("<Document"), receivedMsg.indexOf("</Body"));
+		var payload = receivedMsg.substring(receivedMsg.indexOf("<Document"), receivedMsg.indexOf("</Document") + 11);
+		logger.info("extractPayload: payload = " + payload);
+	}
+
+	return payload;
+}
+
+
+/*
+ ** This function return the message type reading from the Document xmlns attribute
+ * @param {Fednow} exchange - The exchange.
+ * @returns string
+ */
+function getMessageTypeFedNow(exchange) {
+
+	logger.info("In getMessageType");
+	var inMsg = exchange.getIn();
+	var map = inMsg.getHeaders();
+	//var Document = exchange.getIn().getBody(org.w3c.dom.Document.class);
+
+
+	var payload = extractPayload(exchange);
+	var payLoadDoc = createDocument(payload);
+
+	logger.info("In getMessageType : payload: " + payload);
+	logger.info("In getMessageType : payload type: " + typeof payload);
+	logger.info("In getMessageType : payloadDoc: " + payLoadDoc);
+	logger.info("In getMessageType : payloadDoc type: " + typeof payloadDoc);
+
+
+	var xmlnsValue = payLoadDoc.getDocumentElement().getAttribute("xmlns");
+
+	var xmlnsMsgType = null;
+	if (xmlnsValue != null) {
+		logger.trace("xmlns value: " + xmlnsValue);
+
+		var xmlnsSplitValues = xmlnsValue.split(":");
+		xmlnsSplitValues.forEach(element => {
+			logger.trace(element);
+		});
+		xmlnsMsgType = xmlnsSplitValues[xmlnsSplitValues.length - 1].toUpperCase();
+		logger.trace(xmlnsMsgType);
+	}
+
+	return xmlnsMsgType;
+
+}
+
+
+
+/*
+ ** This function is used to update the columns in Database
+ * @param {Fednow} exchange - The exchange.
+ */
+
+function updateQueueIdFedNow(exchange) {
+	var inMsg = exchange.getIn();
+	var map = inMsg.getHeaders();
+	var readMsgdb = inMsg.getHeaders().get("ACEQ_READ_MSGDB");
+	var msgdbMap = new HashMap();
+	var audit = new HashMap();
+	//var Document = exchange.getIn().getBody(org.w3c.dom.Document.class);
+	var queueStatus = 69;
+	// Debug readMsgdb object
+	getMethods(readMsgdb);
+	logger.trace("readMsgdb");
+	getMethods(map);
+	logger.trace("map");
+	// getMethods(inMsg);
+	// logger.info("inmsg");
+
+
+	logger.info("updateQueueId: MSGDB_ID = " + getHeader(map, "PLCN_msgDbId"));
+
+	// var msgDirection = getHeader(map, "PLCN_msgDirection");
+	// logger.info("dbOperation: msgDirection = " + msgDirection);
+
+	// if(msgDirection == "I") {
+	// 	msgdbMap.put("TRANSACTIONTYPE", "D");
+	// }else {
+	// 	msgdbMap.put("TRANSACTIONTYPE", "C");
+	// } 
+
+
+	var msgType = getMessageTypeFedNow(exchange);
+
+	var payload = extractPayload(exchange);
+	var payLoadDoc = createDocument(payload);
+
+	logger.info("In updateQueueId : payload: " + payload);
+	logger.info("In updateQueueId : payload type: " + typeof payload);
+	logger.info("In updateQueueId : payloadDoc: " + payLoadDoc);
+	logger.info("In updateQueueId : payloadDoc type: " + typeof payloadDoc);
+	var Document = payLoadDoc;
+
+
+	//var queueId = getHeader(map, "PLCN_queue");
+	var messageNo = readMsgdb.get("MESSAGENO")
+	var sourceChannelId = readMsgdb.get("CHANNEL_ID_SOURCE");
+	var targetChannelId = readMsgdb.get("CHANNEL_ID_TARGET");
+	logger.info("sourceChannelId :" + sourceChannelId);
+	logger.info("targetChannelId :" + targetChannelId);
+	msgdbMap.put("SOURCECHANNELID", sourceChannelId);
+
+	logger.info("SOURCECHANNELID: " + sourceChannelId);
+
+	// RAVITEJA
+	var MESSAGECLASSTYPE
+	var institutionId = readMsgdb.get("INSTITUTIONID");
+	var processId = getHeader(map, "PLCN_processId");
+	logger.info("updateQueueId: processId = " + processId);
+
+	var msgTypeQueueMap = new HashMap();
+	msgTypeQueueMap.put("PACS.008.001.08", "FEDNCTTQ");
+	msgTypeQueueMap.put("PACS.004.001.10", "FEDNRTTQ");
+	msgTypeQueueMap.put("CAMT.056.001.08", "FEDNRCTQ");
+	msgTypeQueueMap.put("CAMT.029.001.09", "FEDNNRTQ");
+	msgTypeQueueMap.put("PAIN.013.001.07", "FEDNRPTQ");
+	msgTypeQueueMap.put("PAIN.014.001.07", "FEDNRRTQ");
+	msgTypeQueueMap.put("PACS.002.001.10", "FEDNSTTQ");
+	msgTypeQueueMap.put("PACS.028.001.03", "FEDNRPSQ");
+
+	// var queueId = 'ERRORQ';
+	var oQueueId = null;
+	logger.info("msgType: " + msgType);
+
+	if (msgType == null || msgType.trim() == '') {
+
+		logger.info("No XMLNS found");
+		queueStatus = 102;
+
+	}
+	else {
+		//var oQueueId = msgTypeQueueMap.get(msgType.toUpperCase());
+		/// CHECK FOR THE CHANNEL_ID_SOURCE from the DB
+		/// append the mapping
+
+		var messageTypeWIthSourceChannel = sourceChannelId.toUpperCase().trim() + "__" + msgType.toUpperCase().trim();
+		logger.info('messageTypeWIthSourceChannel: ' + messageTypeWIthSourceChannel);
+		oQueueId = memTblGetTableValue(map, "CAMEL-ROUTING", messageTypeWIthSourceChannel).trim().replace(/[\r\n]/gm, '');
+		logger.info('updateQueueId: oQueueId' + oQueueId);
+		logger.info('updateQueueId: msgType' + msgType);
+		// tejadata
+		//msgTypeQueueMap.put("MESSAGECLASSTYPE", msgType);
+
+
+		msgdbMap.put("MESSAGECLASSTYPE", msgType.toLowerCase());
+	}
+
+	if (oQueueId != null) {
+		queueId = oQueueId;
+	}
+	else {
+		queueId = "ERRORQ";
+	}
+
+	if (sourceChannelId.toUpperCase() == "PELICAN" && msgType.toUpperCase() == "CAMT.056.001.08" ) {
+		queueStatus = 79;
+	}
+	setHeader(map, "PLCN_XMLNS_PARSE_QUEUEID", queueId);
+	setHeader(map, "PLCN_XMLNS_PARSE_STATUS", queueStatus);
+
+	logger.info("updateQueueId: queueId = " + queueId);
+	logger.info("updateQueueId: messageNo = " + messageNo);
+
+	/*
+		SOURCE_CHANNEL		TARGET_CHANNEL
+		STP-COREBANKING-IN__SWIFT-FED-OUT-STP
+		PELICAN__SWIFT-FED-OUT-STP
+
+	*/
+
+
+	if (
+		(sourceChannelId.toUpperCase() == "STP-COREBANKING-IN" || sourceChannelId.toUpperCase() == "PELICAN") 
+		// && (targetChannelId.toUpperCase() == "SWIFT-FED-OUT-STP" )
+	) {
+		msgdbMap.put("MESSAGEDIRECTION", "I");
+	}
+	else {
+		msgdbMap.put("MESSAGEDIRECTION", "O");
+	}
+
+	if (queueId != "ERRORQ" && msgType != null) {
+		// Teja
+		if (msgType == "PACS.008.001.08") {
+			logger.info("Inside pacs008");
+			var priorityDatePath = "/Document/FIToFICstmrCdtTrf/CdtTrfTxInf/IntrBkSttlmDt";
+			var datepath = getValueFromPath(Document, priorityDatePath);
+
+
+			if( datepath )
+			{
+				datepath = replaceAllPattern(datepath, "-", "");
+				msgdbMap.put("PRIORITYDATE", datepath);
+				logger.info("Date:" + datepath);
+			}
+
+			//senderPath = "/Document/FIToFICstmrCdtTrf/CdtTrfTxInf/InstgAgt/FinInstnId/BICFI"; //WIP
+			//receiverPath = "/Document/FIToFICstmrCdtTrf/CdtTrfTxInf/InstdAgt/FinInstnId/BICFI"; //WIP
+			var senderPath = "Document/FIToFICstmrCdtTrf/CdtTrfTxInf/DbtrAgt/FinInstnId/ClrSysMmbId/MmbId";
+			var senderPathValue = getValueFromPath(Document, senderPath);
+
+			if( senderPathValue )
+			{
+				logger.info("sendPathValue" + senderPathValue);
+			    msgdbMap.put("SENDER", senderPathValue);
+			}
+
+			var receiverPath = "Document/FIToFICstmrCdtTrf/CdtTrfTxInf/CdtrAgt/FinInstnId/ClrSysMmbId/MmbId";
+			var receiverPathValue = getValueFromPath(Document, receiverPath);
+
+			if( receiverPathValue )
+			{
+				logger.info("receiverPathvalue" + receiverPathValue);
+			    msgdbMap.put("RECEIVER", receiverPathValue);
+			}
+
+			
+			var transRefNoPath = "/Document/FIToFICstmrCdtTrf/CdtTrfTxInf/PmtId/InstrId";
+			var transRefNoPathValue = getValueFromPath(Document, transRefNoPath);
+
+			if( transRefNoPathValue )
+			{
+				
+			logger.info("transRefNoPathValue" + transRefNoPathValue);
+			msgdbMap.put("TRANSREFNO", transRefNoPathValue);
+			}
+
+
+
+			var currencyPath = "/Document/FIToFICstmrCdtTrf/CdtTrfTxInf/IntrBkSttlmAmt/@Ccy";
+			var currencyPathValue = getValueFromPath(Document, currencyPath);
+
+			if( currencyPathValue )
+			{
+				
+				logger.info("currencyPathValue" + currencyPathValue);
+			    msgdbMap.put("CURRENCY", currencyPathValue);
+			}
+
+		
+			var priorityAmountPath = "/Document/FIToFICstmrCdtTrf/CdtTrfTxInf/IntrBkSttlmAmt";
+			var priorityAmountPathValue = getValueFromPath(Document, priorityAmountPath);
+
+			if( priorityAmountPathValue )
+			{
+				
+			     logger.info("priorityAmountPath" + priorityAmountPathValue);
+			     msgdbMap.put("PRIORITYAMOUNT", priorityAmountPathValue);
+			}
+
+
+			var priorityAmountNum = "/Document/FIToFICstmrCdtTrf/CdtTrfTxInf/IntrBkSttlmAmt";
+			var priorityAmountNumValue = getValueFromPath(Document, priorityAmountNum);
+			if( priorityAmountNumValue )
+			{
+				
+				msgdbMap.put("PRIORITYAMOUNTNUM", priorityAmountNumValue);
+				// var  localCurrentAmount="/Document/FIToFICstmrCdtTrf/CdtTrfTxInf/IntrBkSttlmAmt";
+				// var localCurrentAmountValue= getValueFromPath(Document,localCurrentAmount);
+				msgdbMap.put("LOCALCURRENCYAMOUNT", priorityAmountNumValue);
+				// var  localCurrentAmountNum="/Document/FIToFICstmrCdtTrf/CdtTrfTxInf/IntrBkSttlmAmt";
+				// var localCurrentAmountValue= getValueFromPath(Document,localCurrentAmountNum);
+				msgdbMap.put("LOCALCURRENCYAMOUNTNUM", priorityAmountNumValue);
+			}
+
+		
+			var customer = "/Document/FIToFICstmrCdtTrf/CdtTrfTxInf/DbtrAgt/FinInstnId/BICFI";
+			var customerValue = getValueFromPath(Document, customer);
+
+			if( customerValue )
+			{
+				
+			    msgdbMap.put("CUSTOMER", customerValue);
+			// var custom48="Document/FIToFICstmrCdtTrf/CdtTrfTxInf/IntrBkSttlmDt";
+			// var custom48Value= getValueFromPath(Document,custom48);
+			// // custom48Value = replaceAllPattern(custom48Value, "-", "");
+			// msgdbMap.put("CUSTOM48",custom48Value);
+			}
+			
+
+		}
+		else if (msgType == "PACS.002.001.10") {
+			logger.info("Inside pacs002")
+			var priorityDatePath = "/Document/FIToFIPmtStsRpt/TxInfAndSts/FctvIntrBkSttlmDt/Dt";
+			var datepath = getValueFromPath(Document, priorityDatePath);
+			if( datepath )
+			{
+				datepath = replaceAllPattern(datepath, "-", "");
+				msgdbMap.put("PRIORITYDATE", datepath);
+				logger.info("Date:" + datepath);
+			}
+
+
+		}
+		else if (msgType == "CAMT.029.001.09") {
+			logger.info("Inside Camt029");
+			var priorityDatePath = "/Document/RsltnOfInvstgtn/CxlDtls/TxInfAndSts/RsltnRltdInf/IntrBkSttlmDt";
+			var datepath = getValueFromPath(Document, priorityDatePath);
+			if( datepath )
+			{
+				datepath = replaceAllPattern(datepath, "-", "");
+				msgdbMap.put("PRIORITYDATE", datepath);
+				logger.info("Date:" + datepath);
+			}
+			var transStatus = 'Document/RsltnOfInvstgtn/Sts/Conf';
+			transStatusValue= getValueFromPath(Document, transStatus);
+
+			if( transStatusValue )
+			{
+				logger.info("CUSTOM12" + transStatusValue);
+				msgdbMap.put("CUSTOM12",transStatusValue);
+			}
+
+			
+		}
+		else if (msgType == "PAIN.013.001.07") {
+			logger.info("Inside Pain013");
+			var transRefNoPath = "/Document/CdtrPmtActvtnReq/GrpHdr/MsgId";
+			var transRefNoPathValue = getValueFromPath(Document, transRefNoPath);
+
+			if( transRefNoPathValue )
+			{
+				logger.info("transRefNoPathValue" + transRefNoPathValue);
+			    msgdbMap.put("TRANSREFNO", transRefNoPathValue);
+			}
+
+	
+			var currencyPath = "/Document/CdtrPmtActvtnReq/PmtInf/CdtTrfTx/Amt/InstdAmt/@Ccy";
+			var currencyPathValue = getValueFromPath(Document, currencyPath);
+			if( currencyPathValue )
+			{
+				logger.info("currencyPathValue" + currencyPathValue);
+			    msgdbMap.put("CURRENCY", currencyPathValue);
+			}
+
+			
+			var priorityAmount = "/Document/CdtrPmtActvtnReq/PmtInf/CdtTrfTx/Amt/InstdAmt"
+			var priorityAmountPathValue = getValueFromPath(Document, priorityAmount);
+			if( priorityAmountPathValue )
+			{
+				
+			logger.info("priorityAmountPath" + priorityAmountPathValue);
+			msgdbMap.put("PRIORITYAMOUNT", priorityAmountPathValue);;
+			}
+
+			var priorityDatePath = "/Document/CdtrPmtActvtnReq/PmtInf/ReqdExctnDt/Dt";
+			var datepath = getValueFromPath(Document, priorityDatePath);
+			
+			if( datepath )
+			{
+				datepath = replaceAllPattern(datepath, "-", "");
+				msgdbMap.put("PRIORITYDATE", datepath);
+				logger.info("Date:" + datepath);
+			}
+			var senderPath = "/Document/CdtrPmtActvtnReq/PmtInf/DbtrAgt/FinInstnId/BICFI";
+			var senderPathValue = getValueFromPath(Document, senderPath);
+
+			if( senderPathValue )
+			{
+				logger.info("sendPathValue" + senderPathValue);
+				msgdbMap.put("SENDER", senderPathValue);
+			}
+		
+			var receiverPath = "/Document/CdtrPmtActvtnReq/PmtInf/CdtTrfTx/CdtrAgt/FinInstnId/BICFI";
+			var receiverPathValue = getValueFromPath(Document, receiverPath);
+
+			if( receiverPathValue )
+			{
+				logger.info("receiverPathvalue is" + receiverPathValue);
+			    msgdbMap.put("RECEIVER", receiverPathValue)
+			}
+			
+
+		}
+		else if (msgType == "CAMT.056.001.08") 
+		{
+
+			var currencyPath = "/Document/FIToFIPmtCxlReq/Undrlyg/TxInf/OrgnlIntrBkSttlmAmt/@Ccy";
+			var currencyPathValue = getValueFromPath(Document, currencyPath);
+
+			if( currencyPathValue )
+			{
+				logger.info("currencyPathValue" + currencyPathValue);
+			    msgdbMap.put("CURRENCY", currencyPathValue);	
+			}
+			
+
+			
+			var priorityAmountPath = "/Document/FIToFIPmtCxlReq/Undrlyg/TxInf/OrgnlIntrBkSttlmAmt";
+			var priorityAmountPathValue = getValueFromPath(Document, priorityAmountPath);
+			if( priorityAmountPathValue )
+			{
+				logger.info("priorityAmountPath" + priorityAmountPathValue);
+				msgdbMap.put("PRIORITYAMOUNT", priorityAmountPathValue);
+			}
+
+			
+			var priorityAmountNum = "/Document/FIToFIPmtCxlReq/Undrlyg/TxInf/OrgnlIntrBkSttlmAmt";
+			var priorityAmountNumValue = getValueFromPath(Document, priorityAmountNum);
+			if( priorityAmountNumValue )
+			{
+				logger.info("PRIORITYAMOUNTNUM" + priorityAmountNumValue);
+				msgdbMap.put("PRIORITYAMOUNTNUM", priorityAmountNumValue);
+			}
+			
+			
+			var transRefNoPath = "/Document/FIToFIPmtCxlReq/Undrlyg/TxInf/OrgnlInstrId";
+			var transRefNoPathValue = getValueFromPath(Document, transRefNoPath);
+			if( transRefNoPathValue )
+			{
+				logger.info("transRefNoPathValue" + transRefNoPathValue);
+			    msgdbMap.put("TRANSREFNO", transRefNoPathValue);
+			}
+
+			
+			var priorityDatePath = "/Document/FIToFIPmtCxlReq/Undrlyg/TxInf/OrgnlIntrBkSttlmDt";
+			var datepath = getValueFromPath(Document, priorityDatePath);
+			if( datepath )
+			{
+				datepath = replaceAllPattern(datepath, "-", "");
+				msgdbMap.put("PRIORITYDATE", datepath);
+				logger.info("Date:" + datepath);
+			}
+			
+		} else if(msgType == "PAIN.014.001.07") {
+			var transStatus = '/Document/CdtrPmtActvtnReqStsRpt/OrgnlPmtInfAndSts/TxInfAndSts/TxSts';
+			transStatusValue= getValueFromPath(Document, transStatus);
+			if( transStatusValue )
+			{
+				logger.info("CUSTOM12" + transStatusValue);
+				msgdbMap.put("CUSTOM12",transStatusValue);
+			}
+			
+		}else if (msgType == "PACS.004.001.10" ) {
+			var transRefNoPath ="/Document/PmtRtr/TxInf/OrgnlInstrId";
+			var transRefNoPathValue = getValueFromPath(Document, transRefNoPath);
+			if( transRefNoPathValue )
+			{
+				logger.info("transRefNoPathValue" + transRefNoPathValue);
+			msgdbMap.put("TRANSREFNO", transRefNoPathValue);
+			}
+
+
+			
+		}
+
+		var hashCode;
+		var encryptDecrypt;
+		encryptDecrypt = new EncryptDecrypt();
+		hashCode = encryptDecrypt.getMessageDigest("SHA-1", exchange.getIn().getBody(java.lang.String.class));
+		logger.info("hashCode: " + hashCode);
+		msgdbMap.put("CUSTOM44", hashCode);
+		//  Hardcoded 
+		msgdbMap.put("PRIORITY", 9);
+		msgdbMap.put("LOCKSTATUS", 0);
+		msgdbMap.put("NUMOFMESSAGES", 1);
+		msgdbMap.put("CATEGORY", 1);
+		msgdbMap.put("DUPLICATE_RECORD_KEY", "");
+		msgdbMap.put("PROCESSING_STAGE", "FINL");
+		msgdbMap.put("NEXT_WORKFLOW_QUEUE_ID", "");
+		msgdbMap.put("NEXT_WORKFLOW_STATUS", "");
+		msgdbMap.put("MSG_FAMILY","FEDNOW");
+		// msgdbMap.put("MSGFAMILY","FEDNOW");
+		// msgdbMap.put("ORG_MESSAGECLASSTYPE" , 103);
+
+
+		logger.info("Msgdbmap Check " + msgdbMap);
+
+		// msgdbMap.put("QUEUEID", queueId);
+		// msgdbMap.put("DISPLAY_FLAG", "Y");
+		// msgdbMap.put("INSTANCEID","PELICAN1");
+		// msgdbMap.put("PROCESS_ID", processId);
+
+	}
+	else {
+		queueId = "ERRORQ";
+		queueStatus = 102;
+		msgdbMap.put("PROCESSING_STAGE", "ERR");
+		setHeader(map, "PLCN_XMLNS_PARSE_QUEUEID", queueId);
+		setHeader(map, "PLCN_XMLNS_PARSE_STATUS", queueStatus);
+
+	}
+	audit.put("MESSAGENO", messageNo);
+	audit.put("QUEUEID", queueId);
+	//audit.put("USERNAME","ADMIN1");
+	audit.put("APPLICATION", "ACEQ_CMP");
+	audit.put("MODULENAME", "ACEQWRITE");
+	audit.put("ACTION", "WRITE");
+	audit.put("AUDITTEXT", "Message number " + "<" + messageNo + ">" + " read from DB and written into Queue " + "'" + queueId + "'");
+	audit.put("INSTITUTIONID", institutionId);
+
+	setHeader(map, "ACEQ_WRITE_MSGDB", msgdbMap);
+	setHeader(map, "ACEQ_DB_OPERATION", "UPDATE");
+	setHeader(map, "GENAUDIT", audit);
+	logger.info("updateQueueId completed");
+}
+
+function dbOperationFedNow(exchange) {
+	var inMsg = exchange.getIn();
+	var map = inMsg.getHeaders();
+	var Document = exchange.getIn().getBody(org.w3c.dom.Document.class);
+	var readMsgdb = inMsg.getHeaders().get("ACEQ_READ_MSGDB");
+	var msgdbMap = new HashMap();
+	var audit = new HashMap();
+	var CHANNEL_ID_TARGET;
+
+	// Teja
+
+	var priorityDatePath = "/Document/FIToFICstmrCdtTrf/CdtTrfTxInf/IntrBkSttlmDt";
+	var datepath = getValueFromPath(Document, priorityDatePath);
+	logger.info("datepath" + datepath);
+	msgdbMap.put("PRIORITYDATE", datepath);
+	//senderPath = "/Document/FIToFICstmrCdtTrf/CdtTrfTxInf/InstgAgt/FinInstnId/BICFI"; //WIP
+	//receiverPath = "/Document/FIToFICstmrCdtTrf/CdtTrfTxInf/InstdAgt/FinInstnId/BICFI"; //WIP
+	var senderPath = "/Document/FIToFICstmrCdtTrf/CdtTrfTxInf/DbtrAgt/FinInstnId/BICFI";
+	var senderPathValue = getValueFromPath(Document, senderPath);
+	msgdbMap.put("SENDER", senderPathValue);
+	var receiverPath = "/Document/FIToFICstmrCdtTrf/CdtTrfTxInf/CdtrAgt/FinInstnId/BICFI";
+	var receiverPathValue = getValueFromPath(Document, receiverPath);
+	msgdbMap.put("RECEIVER", receiverPathValue);
+	// var	transRefNoPath = "/Document/FIToFICstmrCdtTrf/CdtTrfTxInf/PmtId/InstrId";
+	// msgdbMap.put("PRIORITYDATE",priorityDatePath);
+	var currencyPath = "/Document/FIToFICstmrCdtTrf/CdtTrfTxInf/IntrBkSttlmAmt/@Ccy";
+	var currencyPathValue = getValueFromPath(Document, currencyPath);
+	msgdbMap.put("CURRENCY", currencyPathValue);
+	var priorityAmountPath = "/Document/FIToFICstmrCdtTrf/CdtTrfTxInf/IntrBkSttlmAmt";
+	var priorityAmountPathValue = getValueFromPath(Document, priorityAmountPath);
+	msgdbMap.put("PRIORITYAMOUNT", priorityAmountPathValue);
+
+
+	//  Hardcoded 
+
+	msgdbMap.put("PRIORITY", 9);
+	msgdbMap.put("LOCKSTATUS", 0);
+	msgdbMap.put("NUMOFMESSAGES", 1);
+	msgdbMap.put("CATEGORY", 1);
+	msgdbMap.put("DUPLICATE_RECORD_KEY", "");
+	//msgdbMap.put("PROCESSING_STAGE", "FINL");
+	msgdbMap.put("NEXT_WORKFLOW_QUEUE_ID", "");
+	msgdbMap.put("NEXT_WORKFLOW_STATUS", "");
+
+
+
+	// Teja
+
+
+	var derivedProductCode = readMsgdb.get("DERIVED_PRODUCT");
+	logger.info("ruleGenerateKbJs: derivedProductCode from db = " + derivedProductCode);
+
+	if (!derivedProductCode) {
+		derivedProductCode = drveNibcProductCode(exchange);
+		logger.info("ruleGenerateKbJs: derivedProductCode from hazelcast = " + derivedProductCode);
+		logger.info("ruleGenerateKbJs: typeof derivedProductCode from hazelcast = " + typeof derivedProductCode);
+	} else {
+		setHeader(map, "PLCN_productCode", derivedProductCode);
+	}
+}
+
+function drveNibcProductCode(exchange) {
+	var mode;
+	var msgType;
+	var productCode;
+	var key;
+	var institutionId;
+	var drveProductCodeFlag;
+	var drveProductCodeFlagPath;
+	var sourceChannelId;
+
+	var inMsg = exchange.getIn();
+	var map = inMsg.getHeaders();
+
+	logger.info("In drveNibcProductCode");
+
+	institutionId = getHeader(map, "PLCN_institutionId");
+	logger.info("drveNibcProductCode: institutionId = " + institutionId);
+
+	mode = getHeader(map, "PLCN_msgModeIn");
+	logger.info("drveNibcProductCode: mode = " + mode);
+
+	msgType = getHeader(map, "PLCN_msgType");
+	logger.info("drveNibcProductCode: msgType = " + msgType);
+
+	sourceChannelId = getHeader(map, "PLCN_sourceChannelId");
+	logger.info("drveNibcProductCode: sourceChannelId = " + sourceChannelId);
+
+	drveProductCodeFlagPath = institutionId + "." + "MESSAGE_PROCESSING.FUNCTIONALITY.CHANNEL_MSGTYPE_CONFIG" + "." + sourceChannelId;
+	drveProductCodeFlag = memTblGetTableValue(map, "INST_PARAM", drveProductCodeFlagPath);
+
+	if (isPatternPresent(drveProductCodeFlag, msgType)) {
+		// if (mode == "MANUAL" || mode == "UPLOAD") {
+		// key = mode + "-" + msgType;
+		key = sourceChannelId + "-" + msgType;
+		logger.info("drveNibcProductCode: key = " + key);
+		productCode = memTblGetTableValue(map, "PPAY_PRODUCT_CODE", key);
+		logger.info("drveNibcProductCode: productCode = " + productCode);
+		// }
+
+		if (productCode) {
+			setHeader(map, "PLCN_productCode", productCode);
+			return productCode;
+		}
+	}
+}
+
+/*
+**
+* This function checks whether headers are present in the message or not.
+* @param {CamelExchange} exchange - The exchange.
+*/
+function checkHeader(exchange) {
+	var payload;
+	var bah;
+	var interact;
+	var msgType;
+	var institutionId;
+	var config;
+	var key;
+
+	logger.info("In checkHeader");
+
+	var inMsg = exchange.getIn();
+	var map = inMsg.getHeaders();
+	var message = inMsg.getBody(java.lang.String.class);
+
+	var readMsgdb = inMsg.getHeaders().get("ACEQ_READ_MSGDB");
+	var readMsgBlocks = inMsg.getHeaders().get("ACEQ_READ_MSGBLOCKS");
+	var msgBlock1 = readMsgBlocks.get("MSGBLOCK1");
+	setHeader(map, "ACEDB_msgBlock1", msgBlock1);
+	logger.trace("checkHeader: msgBlock1 = " + msgBlock1);
+	var msgId = readMsgdb.get("MSGDB_ID");
+	logger.info("checkHeader: msgId = " + msgId);
+
+	if (isPatternPresent(msgBlock1, "</DataPDU>")) {
+		setHeader(map, "PLCN_headerPresent", true);
+		setHeader(map, "PLCN_createHeader", false);
+	} else
+		if (isPatternPresent(msgBlock1, "</AppHdr>")) {
+			truncateHeader(exchange);
+			setHeader(map, "PLCN_headerPresent", false);
+			setHeader(map, "PLCN_createHeader", true);
+			setHeader(map, "PLCN_validLAU", true);
+		} else {
+			setHeader(map, "PLCN_headerPresent", false);
+			setHeader(map, "PLCN_createHeader", false);
+			setHeader(map, "PLCN_validLAU", true);
+			logger.info("checkHeader: validLAU = true");
+		}
+
+	logger.info("checkHeader: headerPresent = " + getHeader(map, "PLCN_headerPresent"));
+	logger.info("checkHeader: createHeader = " + getHeader(map, "PLCN_createHeader"));
+}
+
+/*
+**
+* This function truncates header.
+* @param {CamelExchange} exchange - The exchange.
+*/
+function truncateHeader(exchange) {
+	var inMsg = exchange.getIn();
+	var map = inMsg.getHeaders();
+
+	var orgnlMessage = getHeader(map, "ACEDB_msgBlock1"); //inMsg.getBody(java.lang.String.class);
+	logger.info("truncateHeader: orgnlMessage = " + orgnlMessage);
+
+	var readMsgdb = inMsg.getHeaders().get("ACEQ_READ_MSGDB");
+
+	var institutionId = readMsgdb.get("INSTITUTIONID");
+	logger.info("truncateHeader: institutionId = " + institutionId);
+	setHeader(map, "PLCN_institutionId", institutionId);
+
+	var msgType = readMsgdb.get("MESSAGECLASSTYPE");
+	logger.info("truncateHeader: msgType = " + msgType);
+	setHeader(map, "PLCN_msgType", msgType);
+
+	var payload = extractPayload(exchange);
+	logger.info("truncateHeader: payload " + payload);
+
+	var BAH = extractBAH(exchange);
+	setHeader(map, "PLCN_bahFrMsg", BAH);
+
+	setHeader(map, "ACEDB_MSGBLOCK1", payload);
+	setHeader(map, "ACEDB_MSGBLOCK153", orgnlMessage);
+
+	if (msgType == "pacs.002.001.10") {
+		institutionId = getHeader(map, "PLCN_institutionId");
+		key = institutionId + "." + "OUTPUT_CONFIGURATION" + "." + "PACS002_FORMAT"; //to decide block154 value
+		config = memTblGetTableValue(map, "INST_PARAM", key);
+		logger.info("truncateHeader: config = " + config);
+
+		if (config == "header") {
+			setHeader(map, "ACEDB_MSGBLOCK154", orgnlMessage);
+		} else if (config == "payload") {
+			setHeader(map, "ACEDB_MSGBLOCK154", payload);
+		}
+	} else {
+		setHeader(map, "ACEDB_MSGBLOCK154", orgnlMessage);
+	}
+
+	inMsg.setBody(payload);
+}
+
+
+function extractBAH(exchange) {
+	var inMsg = exchange.getIn();
+	var map = inMsg.getHeaders();
+	var receivedMsg = exchange.getIn().getBody(java.lang.String.class);
+
+	logger.info("extractBAH: receivedMsg = " + receivedMsg);
+
+	if (receivedMsg.contains("<AppHdr")) {
+		var BAH = receivedMsg.substring(receivedMsg.indexOf("<AppHdr"), receivedMsg.indexOf("</AppHdr") + 9);
+		logger.info("extractBAH: BAH = " + BAH);
+	}
+
+	return BAH;
+}
+
+function setMsgBlocksData(exchange) {
+	var inMsg = exchange.getIn();
+	var map = inMsg.getHeaders();
+
+	logger.info("In setMsgBlocksData");
+
+	var payload = inMsg.getBody(java.lang.String.class);
+	logger.trace("setMsgBlocksData: payload = " + payload);
+
+	setHeader(map, "PLCN_createHeader", true);
+	setHeader(map, "PLCN_validLAU", true);
+
+	setHeader(map, "ACEDB_MSGBLOCK1", payload);
+	setHeader(map, "ACEDB_MSGBLOCK153", payload);
+	setHeader(map, "ACEDB_MSGBLOCK154", payload);
+	logger.trace("setMsgBlocksData: ACEDB_MSGBLOCK1 = " + getHeader(map, "ACEDB_MSGBLOCK1"));
+	logger.trace("setMsgBlocksData: ACEDB_MSGBLOCK153 = " + getHeader(map, "ACEDB_MSGBLOCK153"));
+	logger.trace("setMsgBlocksData: ACEDB_MSGBLOCK154 = " + getHeader(map, "ACEDB_MSGBLOCK154"));
+}
+
+/*
+**
+* This function validates LAU.
+* @param {CamelExchange} exchange - The exchange.
+*/
+function validateLAU(exchange) {
+	var validLAU;
+	var inMsg = exchange.getIn();
+	var map = inMsg.getHeaders();
+
+	var lau = new AuthCodeGenerator();
+	var jsHelper = new JSHelperClass();
+
+	var readMsgdb = inMsg.getHeaders().get("ACEQ_READ_MSGDB");
+	var sourceChannelId = readMsgdb.get("SOURCECHANNELID");
+	logger.info("validateLAU: sourceChannelId = " + sourceChannelId);
+
+	var lauFlag = memTblGetTableValue(map, "FLAG-TABLE", "IB_FEDNOW_LAU");
+	lauFlag = lauFlag.trim();
+	logger.info("validateLAU: lauFlag = " + lauFlag);
+
+	var readMsgBlocks = inMsg.getHeaders().get("ACEQ_READ_MSGBLOCKS");
+	var msgBlock1 = readMsgBlocks.get("MSGBLOCK1");
+	logger.info("validateLAU: msgBlock1 = " + msgBlock1);
+
+	logger.info("validateLAU: msgBlock1 = " + msgBlock1);
+	logger.info("validateLAU: typeof msgBlock1 = " + typeof msgBlock1);
+
+	if (lauFlag == "Y") {
+		logger.info("validateLAU: calling LAU validator ");
+		var key = jsHelper.getHzlMapValue(exchange.getIn().getHeaders(), "CH_CHANNEL_KEY", sourceChannelId);
+		validLAU = lau.validatePayloadSingnature(msgBlock1, key);
+		logger.info("validateLAU: valid LAU = " + validLAU);
+	} else {
+		validLAU = true;
+		logger.info("validateLAU: valid LAU = " + validLAU);
+	}
+
+	if (validLAU == false) {
+		setHeader(map, "PLCN_queue", "ERRORQ");
+		setHeader(map, "PLCN_displayFlag", "Y");
+		setHeader(map, "PLCN_processingStage", "ERR");
+		//setHeader(map,"PLCN_currentAuthLevel", "ERR=4");
+		setHeader(map, "PLCN_ERRORQ", true);
+		setHeader(map, "PLCN_validFlag", "false");
+		setHeader(map, "PLCN_validMessage", false);
+		setCommentsForTransaction("00", "5847", map);
+	}
+
+	setHeader(map, "PLCN_validLAU", validLAU);
+}
+
+function getMessageType(exchange){
+	logger.info("In getMessageType");
+	var inMsg = exchange.getIn();
+	var map = inMsg.getHeaders();
+	var Document = exchange.getIn().getBody(org.w3c.dom.Document.class);
+	var xmlnsMsgType=null;
+
+	var isXml = isXmlNodePresent2(Document, "Document");
+
+	if(isXml != true) {
+		xmlnsMsgType = "MT";
+	}else {
+		var xmlnsValue = Document.getDocumentElement().getAttribute("xmlns");
+		if (xmlnsValue != null) {
+			logger.info("xmlns value: " + xmlnsValue);
+
+			var xmlnsSplitValues = xmlnsValue.split(":");
+			xmlnsSplitValues.forEach(element => {
+			 logger.info(element);
+			});
+			xmlnsMsgType = xmlnsSplitValues[xmlnsSplitValues.length - 1].toUpperCase();
+			logger.info(xmlnsMsgType);
+		}
+	}
+ 
+	 return xmlnsMsgType; 
+}
+
+function updateQueueIdMx(exchange){
+	var Document = exchange.getIn().getBody(org.w3c.dom.Document.class);
+	var inMsg = exchange.getIn();
+	var map = inMsg.getHeaders();
+	var readMsgdb = inMsg.getHeaders().get("ACEQ_READ_MSGDB");
+	var msgdbMap = new HashMap();
+	var audit = new HashMap();
+	var priorityDatePath;
+	var senderPath;
+	var receiverPath;
+	var transRefNoPath;
+	var hashCode;
+	var encryptDecrypt;
+
+	// Debug readMsgdb object
+	//getMethods(readMsgdb);
+	//getMethods(map);
+
+	var mode = readMsgdb.get("MSG_MODE_IN");
+	logger.info("updateQueueIdMx: mode = " + mode);
+	setHeader(map, "PLCN_mode", mode);
+	setHeader(map, "PLCN_msgModeIn", mode);
+
+	var institutionId =  readMsgdb.get("INSTITUTIONID");
+	logger.info("updateQueueIdMx: institutionId = " + institutionId);
+	setHeader(map, "PLCN_institutionId", institutionId);
+	
+	logger.info("updateQueueIdMx: MSGDB_ID = " + readMsgdb.get("MSGDB_ID"));
+
+	var msgType = getMessageType(exchange);
+	logger.info("updateQueueIdMx: msgType = " + msgType);
+	setHeader(map, "PLCN_msgType", msgType.toLowerCase());
+	
+	var messageNo = readMsgdb.get("MESSAGENO");
+	logger.info("updateQueueIdMx: messageNo = " + messageNo);
+	setHeader(map, "PLCN_messageNo", messageNo);
+
+	var sourceChannelId = readMsgdb.get("CHANNEL_ID_SOURCE");
+	logger.info("updateQueueIdMx: sourceChannelId = " + sourceChannelId);
+	msgdbMap.put("SOURCECHANNELID", sourceChannelId);
+	setHeader(map, "PLCN_sourceChannelId", sourceChannelId);
+
+	msgDirection = memTblGetTableValue(map, "DIRECTION_CHK_MAP", sourceChannelId);
+	logger.info("updateQueueIdMx: msgDirection = " + msgDirection);
+	setHeader(map, "PLCN_msgDirection", msgDirection);
+
+	// RAVITEJA
+	var MESSAGECLASSTYPE
+	var institutionId =  readMsgdb.get("INSTITUTIONID");
+	var processId = getHeader(map,"PLCN_processId");
+	logger.info("updateQueueIdMx: processId = " + processId);
+
+	var msgTypeQueueMap = new HashMap();
+
+	if(msgDirection == "I") {
+		msgTypeQueueMap.put("PACS.008.001.08", "MQINPIN");
+		msgTypeQueueMap.put("PACS.009.001.08", "MQINPIN");
+		msgTypeQueueMap.put("PACS.004.001.10", "MQINPIN");
+		msgTypeQueueMap.put("PACS.002.001.10", "MQINPIN");
+		msgTypeQueueMap.put("PAIN.001.001.09", "PAYINITQ");
+		msgTypeQueueMap.put("PAIN.002.001.10", "PAYSTSRQ");
+		msgTypeQueueMap.put("PAIN.001.001.03", "MQINPIN");
+		msgTypeQueueMap.put("PACS.008.001.02", "MQINPIN");
+		msgTypeQueueMap.put("MT", "MQINPIN");
+	}else {
+		msgTypeQueueMap.put("PACS.008.001.08", "MQINPIN");
+		msgTypeQueueMap.put("PACS.009.001.08", "MQINPIN");
+		msgTypeQueueMap.put("PACS.004.001.10", "MQINPIN");
+		msgTypeQueueMap.put("PACS.002.001.10", "MQINPIN");
+		msgTypeQueueMap.put("PAIN.001.001.09", "PAYINIIQ");
+		msgTypeQueueMap.put("PAIN.002.001.10", "PAYSTSIQ");
+		msgTypeQueueMap.put("PAIN.001.001.03", "MQINPIN");
+		msgTypeQueueMap.put("PACS.008.001.02", "MQINPIN");
+		msgTypeQueueMap.put("MT", "MQINPIN");		
+
+	}
+
+	/*	if(msgDirection == "I" && sourceChannelId == "STP-TBLX-IN") {
+		updateSepaQueueId(exchange);
+		queueId = getHeader(map , "PLCN_SEPA_QUEUEID");
+		msgTypeQueueMap.put("PACS.008.001.08", "SEPACCTQ");
+		msgTypeQueueMap.put("CAMT.056.001.08", "SEPARCTQ");
+		msgTypeQueueMap.put("CAMT.029.001.09", "SEPANRTQ");
+		msgTypeQueueMap.put("PACS.004.001.09", "SEPAFRTQ");
+	}*/
+
+	if(msgType == null ){
+		logger.info("updateQueueIdMx: No XMLNS found");
+	}
+	else{
+		var oQueueId = msgTypeQueueMap.get(msgType.toUpperCase());
+		logger.info('updateQueueIdMx: oQueueId = '+ oQueueId);
+		logger.info('updateQueueIdMx: msgType = '+msgType);
+		// tejadata
+		//msgTypeQueueMap.put("MESSAGECLASSTYPE", msgType);
+
+		msgType = msgType.toLowerCase()
+
+		if(msgType != "MT") {
+			msgdbMap.put("MESSAGECLASSTYPE", msgType);
+			msgdbMap.put("MSG_FAMILY", "CBPR");
+		}
+
+		if(oQueueId != null){
+			queueId = oQueueId;
+		}
+	}
+
+	if(msgType == "pain.001.001.09") {
+		priorityDatePath = "/Document/CstmrCdtTrfInitn/PmtInf/ReqdExctnDt/Dt";
+
+		if(msgDirection == "I") {
+			senderPath = "/Document/CstmrCdtTrfInitn/GrpHdr/InitgPty/Id/OrgId/AnyBIC";
+			receiverPath = "/Document/CstmrCdtTrfInitn/GrpHdr/FwdgAgt/FinInstnId/BICFI";
+		}
+		else{
+			senderPath = "/Document/AppHdr/Fr/FIId/FinInstnId/BICFI";
+			receiverPath = "/Document/AppHdr/To/FIId/FinInstnId/BICFI";
+		}
+	}
+
+	if(msgType == "pain.002.001.10") {
+		if(msgDirection == "I") {
+			receiverPath = "/Document/AppHdr/Fr/FIId/FinInstnId/BICFI";
+			senderPath = "/Document/AppHdr/To/FIId/FinInstnId/BICFI";
+		}
+		else{
+			receiverPath = "/Document/CstmrPmtStsRpt/GrpHdr/InitgPty/Id/OrgId/AnyBIC";
+			senderPath = "/Document/CstmrPmtStsRpt/GrpHdr/FwdgAgt/FinInstnId/BICFI";
+		}
+
+		transRefNoPath = "/Document/CstmrPmtStsRpt/GrpHdr/MsgId";
+	}
+
+	if(priorityDatePath) {
+		var priorityDate = getValueFromPath(Document, priorityDatePath);
+		logger.info("updateQueueIdMx: priorityDate = " + priorityDate);
+		priorityDate = replaceAllPattern(priorityDate, "-", "");
+		logger.info("updateQueueIdMx: priorityDate = " + priorityDate);
+		msgdbMap.put("PRIORITYDATE", priorityDate);
+	}
+
+	if(senderPath) {
+		var sender = getValueFromPath(Document, senderPath);
+		logger.info("updateQueueIdMx: sender = " + sender);
+		msgdbMap.put("SENDER", sender);
+	}
+
+	if(receiverPath) {
+		var receiver = getValueFromPath(Document, receiverPath);
+		logger.info("updateQueueIdMx: receiver = " + receiver);
+		msgdbMap.put("RECEIVER", receiver);
+	}
+
+	if(transRefNoPath) {
+		var transRefNo = getValueFromPath(Document, transRefNoPath);
+		logger.info("updateQueueIdMx: transRefNo = " + transRefNo);
+		msgdbMap.put("TRANSREFNO", transRefNo);	
+	}
+
+	setHeader(map, "PLCN_XMLNS_PARSE_QUEUEID", queueId);
+
+	logger.info("updateQueueIdMx: queueId = " + queueId);
+	logger.info("updateQueueIdMx: messageNo = " + messageNo);
+	
+	var derivedProductCode = drveProductCode(exchange);
+	logger.info("updateQueueIdMx: derivedProductCode = " + derivedProductCode);
+
+	if(derivedProductCode) {
+		logger.info("updateQueueIdMx: derivedProductCode = " + derivedProductCode);
+		msgdbMap.put("DERIVED_PRODUCT", derivedProductCode);
+	}
+
+	encryptDecrypt = new EncryptDecrypt();
+	hashCode = encryptDecrypt.getMessageDigest("SHA-1", exchange.getIn().getBody(java.lang.String.class));
+	logger.info("updateQueueIdMx: hashCode = " + hashCode);
+
+	msgdbMap.put("CUSTOM44", hashCode);
+	msgdbMap.put("PRIORITY", 9);
+	msgdbMap.put("LOCKSTATUS", 0);
+	msgdbMap.put("NUMOFMESSAGES", 1);
+	msgdbMap.put("CATEGORY", 1);
+	msgdbMap.put("DUPLICATE_RECORD_KEY", "");
+	msgdbMap.put("PROCESSING_STAGE", "PEND");
+	msgdbMap.put("NEXT_WORKFLOW_QUEUE_ID", "");
+	msgdbMap.put("NEXT_WORKFLOW_STATUS", "");
+
+	audit.put("MESSAGENO", messageNo);
+
+	if(getHeader(map, "PLCN_isXML") == true) {
+		audit.put("QUEUEID", queueId);
+	}else {
+		audit.put("QUEUEID", "MQINPIN");
+	}
+
+	//audit.put("USERNAME","ADMIN1");
+	audit.put("APPLICATION","ACEQ_CMP");
+	audit.put("MODULENAME","ACEQWRITE");
+	audit.put("ACTION","WRITE");
+	audit.put("AUDITTEXT","Message number " +  "<" + messageNo + ">" + " read from DB and written into Queue " +  "'" + queueId + "'");
+	audit.put("INSTITUTIONID", institutionId);
+
+	setHeader(map, "ACEQ_WRITE_MSGDB", msgdbMap);
+	setHeader(map, "ACEQ_DB_OPERATION", "UPDATE");
+	setHeader(map, "GENAUDIT", audit);
+}
+
+function drveProductCode(exchange) {
+	var mode;
+	var msgType;
+	var productCode;
+	var key;
+	var institutionId;
+	var drveProductCodeFlag;
+	var drveProductCodeFlagPath;
+	var sourceChannelId;
+	
+	var inMsg = exchange.getIn();
+	var map = inMsg.getHeaders();
+
+	logger.info("In drveProductCode");
+
+	institutionId = getHeader(map, "PLCN_institutionId");
+	logger.info("drveProductCode: institutionId = " + institutionId);
+
+	mode = getHeader(map, "PLCN_msgModeIn");
+	logger.info("drveProductCode: mode = " + mode);
+
+	msgType = getHeader(map, "PLCN_msgType");
+	logger.info("drveProductCode: msgType = " + msgType);
+
+	sourceChannelId = getHeader(map, "PLCN_sourceChannelId");
+	logger.info("drveProductCode: sourceChannelId = " + sourceChannelId);
+
+	drveProductCodeFlagPath = institutionId + "." + "MESSAGE_PROCESSING.FUNCTIONALITY.CHANNEL_MSGTYPE_CONFIG" + "." + sourceChannelId;
+	drveProductCodeFlag = memTblGetTableValue(map, "INST_PARAM", drveProductCodeFlagPath);
+	logger.info("drveProductCode: drveProductCodeFlag = " + drveProductCodeFlag);
+
+	
+		//if(mode == "MANUAL" || mode == "UPLOAD") {
+			//key = mode + "-" + msgType;
+			key = sourceChannelId + "-" + msgType;
+			logger.info("drveProductCode: key = " + key);
+
+			productCode = memTblGetTableValue(map, "PPAY_PRODUCT_CODE", key);
+			logger.info("drveProductCode: productCode = " + productCode);
+		//}
+
+	if(!isPatternPresent(drveProductCodeFlag, msgType)) {
+		productCode = "";
+	}
+
+	if(productCode) {
+		setHeader(map, "PLCN_productCode", productCode);
+		return productCode;
+	}		
+}
+
+function checkMsgFamily(exchange) {
+	var inMsg;
+	var map;
+	var readMsgdb;
+	var Document;
+
+	logger.info("In checkMsgFamily");
+
+	inMsg = exchange.getIn();
+	map = inMsg.getHeaders();
+
+	var messageBody = inMsg.getBody(java.lang.String.class);
+	logger.info("checkMsgFamily: messageBody = " + messageBody);
+
+	if(isPatternPresent(messageBody, '<Document xmlns="')) {
+		setHeader(map, "PLCN_isXML", true);
+		logger.info("checkMsgFamily: MX Message");
+	}else{
+		setHeader(map, "PLCN_isXML", false);
+		logger.info("checkMsgFamily: MT Message");
+	}	
+}
+
+function updateSepaQueueId(exchange){
+	var Document = exchange.getIn().getBody(org.w3c.dom.Document.class);
+	var inMsg = exchange.getIn();
+	var map = inMsg.getHeaders();
+	var readMsgdb = inMsg.getHeaders().get("ACEQ_READ_MSGDB");
+	var msgdbMap = new HashMap();
+	var audit = new HashMap();
+	var priorityDate;
+	var sender;
+	var receiver;
+	var transRefNo;
+	var currency;
+	var hashCode;
+	var encryptDecrypt;
+	var custom13;
+
+	var mode = readMsgdb.get("MSG_MODE_IN");
+	logger.info("updateSepaQueueId: mode = " + mode);
+	setHeader(map, "PLCN_mode", mode);
+	setHeader(map, "PLCN_msgModeIn", mode);
+
+	var institutionId =  readMsgdb.get("INSTITUTIONID");
+	logger.info("updateSepaQueueId: institutionId = " + institutionId);
+	setHeader(map, "PLCN_institutionId", institutionId);
+	
+	logger.info("updateSepaQueueId: MSGDB_ID = " + readMsgdb.get("MSGDB_ID"));
+
+	priorityDate = getHeader(map, "PLCN_priorityDate");
+	priorityDate = replaceAllPattern(priorityDate, "-", "");
+	msgdbMap.put("PRIORITYDATE", priorityDate);
+
+	priorityAmt = getHeader(map, "PLCN_amount");
+	msgdbMap.put("PRIORITYAMOUNT", priorityAmt);
+	msgdbMap.put("PRIORITYAMOUNTNUM", priorityAmt);
+
+	transRefNo = getHeader(map, "PLCN_transRefNo");
+	msgdbMap.put("TRANSREFNO", transRefNo);
+
+	currency = getHeader(map, "PLCN_currency");
+	msgdbMap.put("CURRENCY", currency);
+
+	sender = getHeader(map, "PLCN_sender");
+	logger.info("updateSepaQueueId: sender = " + sender);
+	msgdbMap.put("SENDER", sender);
+
+	receiver = getHeader(map, "PLCN_receiver");
+	logger.info("updateSepaQueueId: receiver = " + receiver);
+	msgdbMap.put("RECEIVER", receiver);
+
+	msgType = getHeader(map, "PLCN_msgType");
+	logger.info("updateSepaQueueId: msgType = " + msgType);
+
+	if(!msgType){
+		msgType = getMessageType(exchange);
+		msgType = msgType.toLowerCase();		
+	}
+
+	setHeader(map, "PLCN_msgType", msgType.toLowerCase());
+	
+	var messageNo = readMsgdb.get("MESSAGENO");
+	logger.info("updateSepaQueueId: messageNo = " + messageNo);
+	setHeader(map, "PLCN_messageNo", messageNo);
+
+	var sourceChannelId = readMsgdb.get("CHANNEL_ID_SOURCE");
+	logger.info("updateSepaQueueId: sourceChannelId = " + sourceChannelId);
+	msgdbMap.put("SOURCECHANNELID", sourceChannelId);
+	setHeader(map, "PLCN_sourceChannelId", sourceChannelId);
+
+	msgDirection = memTblGetTableValue(map, "DIRECTION_CHK_MAP", sourceChannelId);
+	logger.info("updateSepaQueueId: msgDirection = " + msgDirection);
+	setHeader(map, "PLCN_msgDirection", msgDirection);
+
+	// RAVITEJA
+	var institutionId =  readMsgdb.get("INSTITUTIONID");
+	var processId = getHeader(map,"PLCN_processId");
+	logger.info("updateSepaQueueId: processId = " + processId);
+
+	var custom13 = getHeader(map, "PLCN_custom13");
+	logger.info("updateSepaQueueId: custom13 = " + custom13);
+
+	messageQueueid = memTblGetTableValue(map, "SCT_QUEUEID", msgType + "_"  + "SEPA" + "-" + msgDirection);
+	logger.info("updateSepaQueueId: messageQueueid = " + messageQueueid);
+
+	custom13 = getHeader(map, "PLCN_custom13");
+	logger.info("updateSepaQueueId: custom13 = " + custom13);
+
+	if(msgType == null ){
+		logger.info("updateSepaQueueId: No XMLNS found");
+	}
+	else{
+		//var oQueueId = msgTypeQueueMap.get(msgType.toUpperCase());
+		//logger.info('updateSepaQueueId: oQueueId = '+ oQueueId);
+		logger.info('updateSepaQueueId: msgType = '+msgType);
+		// tejadata
+		//msgTypeQueueMap.put("MESSAGECLASSTYPE", msgType);
+
+		msgType = msgType.toLowerCase()
+
+		if(msgType != "MT") {
+			msgdbMap.put("MESSAGECLASSTYPE", msgType);
+			msgdbMap.put("MSG_FAMILY", "SEPA");
+		}
+	}
+
+	/*if(messageQueueid){
+		messageQueueid = messageQueueid.trim();
+		msgdbMap.put("QUEUEID", messageQueueid);
+	}*/
+
+	setHeader(map, "PLCN_SEPA_QUEUEID", messageQueueid);
+	setHeader(map, "PLCN_XMLNS_PARSE_QUEUEID", messageQueueid);
+
+	logger.info("updateSepaQueueId: queueId = " + messageQueueid);
+	logger.info("updateSepaQueueId: messageNo = " + messageNo);
+	
+	var derivedProductCode = drveProductCode(exchange);
+	logger.info("updateSepaQueueId: derivedProductCode = " + derivedProductCode);
+
+	if(derivedProductCode) {
+		logger.info("updateSepaQueueId: derivedProductCode = " + derivedProductCode);
+		msgdbMap.put("DERIVED_PRODUCT", derivedProductCode);
+	}
+
+	encryptDecrypt = new EncryptDecrypt();
+	hashCode = encryptDecrypt.getMessageDigest("SHA-1", exchange.getIn().getBody(java.lang.String.class));
+	logger.info("updateSepaQueueId: hashCode = " + hashCode);
+
+	msgdbMap.put("CUSTOM44", hashCode);
+	msgdbMap.put("CUSTOM13", custom13);
+	msgdbMap.put("MESSAGEDIRECTION", msgDirection);
+	msgdbMap.put("PRIORITY", 9);
+	msgdbMap.put("LOCKSTATUS", 0);
+	msgdbMap.put("NUMOFMESSAGES", 1);
+	msgdbMap.put("CATEGORY", 1);
+	msgdbMap.put("DUPLICATE_RECORD_KEY", "");
+	msgdbMap.put("PROCESSING_STAGE", "PEND");
+	msgdbMap.put("NEXT_WORKFLOW_QUEUE_ID", "");
+	msgdbMap.put("NEXT_WORKFLOW_STATUS", "");
+
+	audit.put("MESSAGENO", messageNo);
+
+	if(getHeader(map, "PLCN_isXML") == true) {
+		audit.put("QUEUEID", messageQueueid);
+	}
+
+	//audit.put("USERNAME","ADMIN1");
+	audit.put("APPLICATION","ACEQ_CMP");
+	audit.put("MODULENAME","ACEQWRITE");
+	audit.put("ACTION","WRITE");
+	audit.put("AUDITTEXT","Message number " +  "<" + messageNo + ">" + " read from DB and written into Queue " +  "'" + messageQueueid + "'");
+	audit.put("INSTITUTIONID", institutionId);
+
+	setHeader(map, "ACEQ_WRITE_MSGDB", msgdbMap);
+	setHeader(map, "ACEQ_DB_OPERATION", "UPDATE");
+	setHeader(map, "GENAUDIT", audit);
+}
