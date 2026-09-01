@@ -1,0 +1,11 @@
+﻿matchingQueue,TMPTXVWQ
+cashForecasting1,TMPBALQ1
+sanctionsHoldQueue,OFACHLDQ
+authorizationQueue,AUTHTXNQ
+holdQueue,TXNHOLDQ
+dispositionQueue,DSPMSGQ1
+falseSanctionsQueue,OFAC-IN
+bulkingQueue,SEPABLKQ
+cashForecasting2,DSPMSGQ1
+repairQueue,SCTREPR
+internalBookingFinalQueue,PROCDQ

@@ -1,0 +1,138 @@
+nstnId/LEI,LEI
+/AppHdr/Rltd/To/FIId/FinInstnId/Nm,Name
+/AppHdr/Rltd/To/FIId/FinInstnId/PstlAdr,Postal Address
+/AppHdr/Rltd/To/FIId/FinInstnId/Othr,Other
+/AppHdr/Rltd/To/FIId/BrnchId,/AppHdr,Business Application Header V02 (head.001.001.02)
+/AppHdr/CharSet,Character Set
+/AppHdr/Fr,From
+/AppHdr/Fr/OrgId,Organisation Identification
+/AppHdr/Fr/OrgId/Nm,Name
+/AppHdr/Fr/OrgId/PstlAdr,Postal Address
+/AppHdr/Fr/OrgId/Id,Identification
+/AppHdr/Fr/OrgId/Id/PrvtId,Private Identification
+/AppHdr/Fr/OrgId/CtryOfRes,Country Of Residence
+/AppHdr/Fr/OrgId/CtctDtls,Contact Details
+/AppHdr/Fr/FIId,Financial Institution Identification
+/AppHdr/Fr/FIId/FinInstnId,Financial Institution Identification
+/AppHdr/Fr/FIId/FinInstnId/BICFI,BICFI
+/AppHdr/Fr/FIId/FinInstnId/ClrSysMmbId,Clearing System Member Identification
+/AppHdr/Fr/FIId/FinInstnId/ClrSysMmbId/ClrSysId,Clearing System Identification
+/AppHdr/Fr/FIId/FinInstnId/ClrSysMmbId/ClrSysId/Cd,Code
+/AppHdr/Fr/FIId/FinInstnId/ClrSysMmbId/ClrSysId/Prtry,Proprietary
+/AppHdr/Fr/FIId/FinInstnId/ClrSysMmbId/MmbId,Member Identification
+/AppHdr/Fr/FIId/FinInstnId/LEI,LEI
+/AppHdr/Fr/FIId/FinInstnId/Nm,Name
+/AppHdr/Fr/FIId/FinInstnId/PstlAdr,Postal Address
+/AppHdr/Fr/FIId/FinInstnId/Othr,Other
+/AppHdr/Fr/FIId/BrnchId,Branch Identification
+/AppHdr/To,To
+/AppHdr/To/OrgId,Organisation Identification
+/AppHdr/To/OrgId/Nm,Name
+/AppHdr/To/OrgId/PstlAdr,Postal Address
+/AppHdr/To/OrgId/CtryOfRes,Country Of Residence
+/AppHdr/To/OrgId/CtctDtls,Contact Details
+/AppHdr/To/FIId,Financial Institution Identification
+/AppHdr/To/FIId/FinInstnId,Financial Institution Identification
+/AppHdr/To/FIId/FinInstnId/BICFI,BICFI
+/AppHdr/To/FIId/FinInstnId/ClrSysMmbId,Clearing System Member Identification
+/AppHdr/To/FIId/FinInstnId/ClrSysMmbId/ClrSysId,Clearing System Identification
+/AppHdr/To/FIId/FinInstnId/ClrSysMmbId/ClrSysId/Cd,Code
+/AppHdr/To/FIId/FinInstnId/ClrSysMmbId/ClrSysId/Prtry,Proprietary
+/AppHdr/To/FIId/FinInstnId/ClrSysMmbId/MmbId,Member Identification
+/AppHdr/To/FIId/FinInstnId/LEI,LEI
+/AppHdr/To/FIId/FinInstnId/Nm,Name
+/AppHdr/To/FIId/FinInstnId/PstlAdr,Postal Address
+/AppHdr/To/FIId/FinInstnId/Othr,Other
+/AppHdr/To/FIId/BrnchId,Branch Identification
+/AppHdr/BizMsgIdr,Business Message Identifier
+/AppHdr/MsgDefIdr,Message Definition Identifier
+/AppHdr/BizSvc,Business Service
+/AppHdr/MktPrctc,Market Practice
+/AppHdr/MktPrctc/Regy,Registry
+/AppHdr/MktPrctc/Id,Identification
+/AppHdr/CreDt,Creation Date
+/AppHdr/BizPrcgDt,Business Processing Date
+/AppHdr/CpyDplct,Copy Duplicate
+/AppHdr/CpyDplct,Copy Duplicate
+/AppHdr/CpyDplct,Copy
+/AppHdr/CpyDplct,Duplicate
+/AppHdr/PssblDplct,Possible Duplicate
+/AppHdr/Prty,Priority
+/AppHdr/Prty,High
+/AppHdr/Prty,Normal
+/AppHdr/Sgntr,Signature
+/AppHdr/Rltd,Related
+/AppHdr/Rltd/CharSet,Character Set
+/AppHdr/Rltd/Fr,From
+/AppHdr/Rltd/Fr/OrgId,Organisation Identification
+/AppHdr/Rltd/Fr/OrgId/Nm,Name
+/AppHdr/Rltd/Fr/OrgId/PstlAdr,Postal Address
+/AppHdr/Rltd/Fr/OrgId/Id,Identification
+/AppHdr/Rltd/Fr/OrgId/Id/PrvtId,Private Identification
+/AppHdr/Rltd/Fr/OrgId/CtryOfRes,Country Of Residence
+/AppHdr/Rltd/Fr/OrgId/CtctDtls,Contact Details
+/AppHdr/Rltd/Fr/FIId,Financial Institution Identification
+/AppHdr/Rltd/Fr/FIId/FinInstnId,Financial Institution Identification
+/AppHdr/Rltd/Fr/FIId/FinInstnId/BICFI,BICFI
+/AppHdr/Rltd/Fr/FIId/FinInstnId/ClrSysMmbId,Clearing System Member Identification
+/AppHdr/Rltd/Fr/FIId/FinInstnId/ClrSysMmbId/ClrSysId,Clearing System Identification
+/AppHdr/Rltd/Fr/FIId/FinInstnId/ClrSysMmbId/ClrSysId/Cd,Code
+/AppHdr/Rltd/Fr/FIId/FinInstnId/ClrSysMmbId/ClrSysId/Prtry,Proprietary
+/AppHdr/Rltd/Fr/FIId/FinInstnId/ClrSysMmbId/MmbId,Member Identification
+/AppHdr/Rltd/Fr/FIId/FinInstnId/LEI,LEI
+/AppHdr/Rltd/Fr/FIId/FinInstnId/Nm,Name
+/AppHdr/Rltd/Fr/FIId/FinInstnId/PstlAdr,Postal Address
+/AppHdr/Rltd/Fr/FIId/FinInstnId/Othr,Other
+/AppHdr/Rltd/Fr/FIId/BrnchId,Branch Identification
+/AppHdr/Rltd/To,To
+/AppHdr/Rltd/To/OrgId,Organisation Identification
+/AppHdr/Rltd/To/OrgId/Nm,Name
+/AppHdr/Rltd/To/OrgId/PstlAdr,Postal Address
+/AppHdr/Rltd/To/OrgId/Id,Identification
+/AppHdr/Rltd/To/OrgId/Id/PrvtId,Private Identification
+/AppHdr/Rltd/To/OrgId/CtryOfRes,Country Of Residence
+/AppHdr/Rltd/To/OrgId/CtctDtls,Contact Details
+/AppHdr/Rltd/To/FIId,Financial Institution Identification
+/AppHdr/Rltd/To/FIId/FinInstnId,Financial Institution Identification
+/AppHdr/Rltd/To/FIId/FinInstnId/BICFI,BICFI
+/AppHdr/Rltd/To/FIId/FinInstnId/ClrSysMmbId,Clearing System Member Identification
+/AppHdr/Rltd/To/FIId/FinInstnId/ClrSysMmbId/ClrSysId,Clearing System Identification
+/AppHdr/Rltd/To/FIId/FinInstnId/ClrSysMmbId/ClrSysId/Cd,Code
+/AppHdr/Rltd/To/FIId/FinInstnId/ClrSysMmbId/ClrSysId/Prtry,Proprietary
+/AppHdr/Rltd/To/FIId/FinInstnId/ClrSysMmbId/MmbId,Member Identification
+/AppHdr/Rltd/To/FIId/FinIBranch Identification
+/AppHdr/Rltd/BizMsgIdr,Business Message Identifier
+/AppHdr/Rltd/MsgDefIdr,Message Definition Identifier
+/AppHdr/Rltd/BizSvc,Business Service
+/AppHdr/Rltd/CreDt,Creation Date
+/AppHdr/Rltd/CpyDplct,Copy Duplicate
+/AppHdr/Rltd/CpyDplct,Copy Duplicate
+/AppHdr/Rltd/CpyDplct,Copy
+/AppHdr/Rltd/CpyDplct,Duplicate
+/AppHdr/Rltd/PssblDplct,Possible Duplicate
+/AppHdr/Rltd/Prty,Priority
+/AppHdr/Rltd/Sgntr,Signature
+/FIToFIPmtStsReq,FI To FI Payment Status Request V03 (pacs.028.001.03
+/FIToFIPmtStsReq/GrpHdr,Group Header
+/FIToFIPmtStsReq/GrpHdr/CreDtTm,Creation Date Time
+/FIToFIPmtStsReq/GrpHdr/MsgId,Message Identification
+/FIToFIPmtStsReq/TxInf,Transaction Information
+/FIToFIPmtStsReq/TxInf/InstdAgt,Instructed Agent
+/FIToFIPmtStsReq/TxInf/InstdAgt/FinInstnId,Financial Institution Identification
+/FIToFIPmtStsReq/TxInf/InstdAgt/FinInstnId/ClrSysMmbId,Clearing System Member Identification
+/FIToFIPmtStsReq/TxInf/InstdAgt/FinInstnId/ClrSysMmbId/ClrSysId,Clearing System Identification
+/FIToFIPmtStsReq/TxInf/InstdAgt/FinInstnId/ClrSysMmbId/MmbId,Member Identification
+/FIToFIPmtStsReq/TxInf/InstgAgt,Instructing Agent
+/FIToFIPmtStsReq/TxInf/InstgAgt/FinInstnId,Financial Institution Identification
+/FIToFIPmtStsReq/TxInf/InstgAgt/FinInstnId/ClrSysMmbId,Clearing System Member Identification
+/FIToFIPmtStsReq/TxInf/InstgAgt/FinInstnId/ClrSysMmbId/ClrSysId,Clearing System Identification
+/FIToFIPmtStsReq/TxInf/InstgAgt/FinInstnId/ClrSysMmbId/MmbId,Member Identification
+/FIToFIPmtStsReq/TxInf/OrgnlEndToEndId,Original End To End Identification
+/FIToFIPmtStsReq/TxInf/OrgnlGrpInf,Original Group Information
+/FIToFIPmtStsReq/TxInf/OrgnlGrpInf/OrgnlCreDtTm,Original Creation Date Time
+/FIToFIPmtStsReq/TxInf/OrgnlGrpInf/OrgnlMsgId,Original Message Identification
+/FIToFIPmtStsReq/TxInf/OrgnlGrpInf/OrgnlMsgNmId,Original Message Name Identification
+/FIToFIPmtStsReq/TxInf/OrgnlInstrId,Original Instruction Identification
+/FIToFIPmtStsReq/TxInf/OrgnlTxId,Original Transaction Identification
+/FIToFIPmtStsReq/TxInf/OrgnlUETR,Original UETR
+
