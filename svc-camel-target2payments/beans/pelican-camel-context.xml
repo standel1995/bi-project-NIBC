@@ -1,0 +1,241 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:camel="http://camel.apache.org/schema/spring"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans.xsd          
+		http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context.xsd       
+		http://camel.apache.org/schema/spring 
+		http://camel.apache.org/schema/spring/camel-spring.xsd">
+
+	<import resource="classpath:/routes/*.xml"/>
+	
+	<camelContext id="MyCamel"
+		xmlns="http://camel.apache.org/schema/spring">
+
+
+		<defaultServiceCallConfiguration component="http">
+			<staticServiceDiscovery>
+					<servers>validation-service@10.10.11.111:8082, validation-service@10.10.11.111:8009</servers>					
+					<servers>ibanBic-service@10.10.11.111:8082, ibanBic-service@10.10.11.111:8009</servers>	
+					<servers>duplicate-check-service@10.10.11.111:8082, duplicate-check-service@10.10.11.111:8009</servers>
+					<servers>scheduling-service@10.10.11.111:8082, scheduling-service@10.10.11.111:8009</servers>					
+					<servers>matching-service@10.10.11.111:8082, matching-service@10.10.11.111:8009</servers>
+			</staticServiceDiscovery>
+		</defaultServiceCallConfiguration>
+
+		<routeContextRef ref="main"/>
+		
+		<onException id="httpException">
+			<exception>org.apache.camel.http.common.HttpOperationFailedException</exception>
+			<exception>java.net.ConnectException</exception>
+			<redeliveryPolicy
+				maximumRedeliveries="2" />
+			<handled>
+				<camel:constant>true</camel:constant>
+			</handled>
+			<setHeader headerName="exception">
+				<simple>${exception.stacktrace}</simple>
+			</setHeader>
+			<setHeader headerName="PLCN_queue">
+				<simple>ERRORQ</simple>
+			</setHeader>			
+			<setHeader headerName="PLCN_validFlag">
+				<simple>false</simple>
+			</setHeader>
+			<setHeader headerName="PLCN_httpException">
+				<simple>true</simple>
+			</setHeader>
+			<bean ref="pelicanController" method="exceptionLogger" />
+			<log message="In httpException onException" />
+			<bean id="jspPopulateDataDBRoute" ref="jspExecute"
+				method="executeWithHazelCastInstance(${exchange},populateMetaData)" />
+			<to uri="direct://dbOperationCamelContext" />
+			<log message="MESSAGE MOVED TO ERRORQ" />
+			<to uri="aceq://endpointwrite?queueID=ERRORQ&amp;pollStatus=69" />
+			<to uri="genaudit://route1Audit" />
+			<stop/>
+		</onException>
+		
+		<onException>
+			<exception>ai.pelican.camel.handler.exception.ExceptionHandler</exception>
+			<handled>
+			<constant>true</constant>
+			</handled>
+			<log message="In ExceptionHandler, exception occured..." />
+			<setHeader headerName="exception">
+				<simple>${exception.stacktrace}</simple>
+			</setHeader>
+			<setHeader headerName="PLCN_queue">
+				<simple>ERRORQ</simple>
+			</setHeader>
+			<setHeader headerName="PLCN_validFlag">
+				<simple>false</simple>
+			</setHeader>			
+			<bean ref="pelicanController" method="exceptionLogger" />			
+			<bean id="jspPopulateDatadbOperationCC" ref="jspExecute"
+				method="executeWithHazelCastInstance(${exchange},dbOperation)" />
+			<!-- <to uri="aceq://authErr?queueID=ERRORQ&amp;pollStatus=79&amp;updateQueueIDStatus=Y&amp;processingStage=ERR" /> -->
+			<to uri="aceq://endpointwrite?queueID=ERRORQ&amp;pollStatus=79" />
+			<log message="MESSAGE MOVED TO ERRORQ" />
+			<to uri="genaudit://route1Audit" />
+			<stop />
+		</onException>
+		
+		<onException>
+			<exception>ai.pelican.camel.exception.AuthenticationException</exception>
+			<handled>
+			<constant>true</constant>
+			</handled>
+			<log message="In AuthenticationException, exception occured..." />
+			<setHeader headerName="exception">
+				<simple>${exception.stacktrace}</simple>
+			</setHeader>
+			<setHeader headerName="PLCN_queue">
+				<simple>ERRORQ</simple>
+			</setHeader>			
+			<setHeader headerName="PLCN_validFlag">
+				<simple>false</simple>
+			</setHeader>			
+			<!--<setHeader headerName="Auth_validFlag">
+				<simple>false</simple>
+			</setHeader>-->
+			<bean ref="pelicanController" method="exceptionLogger" />
+			<bean id="jspPopulateDataDBRoute" ref="jspExecute"
+				method="executeWithHazelCastInstance(${exchange},populateMetaData)" />
+			<to uri="direct://dbOperationCamelContext" />
+			<!--<to uri="aceq://authErr?queueID=ERRORQ&amp;pollStatus=79&amp;updateQueueIDStatus=Y&amp;processingStage=ERR" />
+			 <to uri="aceq://endpointwrite?queueID=ERRORQ&amp;pollStatus=79&amp;updateQueueIDStatus=Y&amp;processingStage=ERR" /> 	-->
+			<log message="MESSAGE MOVED TO ERRORQ" />
+			<to uri="aceq://endpointwrite?queueID=ERRORQ&amp;pollStatus=69" />	
+			<to uri="genaudit://route1Audit" />
+			<stop/>
+		</onException>
+		
+		<onException>
+			<exception>ai.pelican.camel.exception.StaticDataNotFoundException</exception>
+			<redeliveryPolicy
+				maximumRedeliveries="7" redeliveryDelay="30000" />
+			<handled>
+			<constant>true</constant>
+			</handled>
+			<log message="In StaticDataNotFoundException, exception occured..." />
+			<setHeader headerName="exception">
+				<simple>${exception.stacktrace}</simple>
+			</setHeader>
+			<bean ref="pelicanController" method="exceptionLogger" />
+			<stop/>
+		</onException>
+		
+		<onException id="hazelReconnect">
+			<exception>com.hazelcast.client.HazelcastClientNotActiveException</exception>
+			<exception>com.hazelcast.client.HazelcastClientOfflineException</exception>
+			<handled>
+				<constant>true</constant>
+			</handled>
+			<log message="In hazelReconnect handler." />
+			<bean ref="pelicanController" method="stopRoutes" />
+		</onException>
+		
+		<onException>
+			<exception>org.graalvm.polyglot.PolyglotException</exception>
+			<handled>
+			<constant>true</constant>
+			</handled>
+			<log message="In PolyglotException, exception occured..." />
+			<setHeader headerName="exception">
+				<simple>${exception.stacktrace}</simple>
+			</setHeader>
+			<setHeader headerName="PLCN_queue">
+				<simple>ERRORQ</simple>
+			</setHeader>			
+			<setHeader headerName="PLCN_validFlag">
+				<simple>false</simple>
+			</setHeader>
+			<setHeader headerName="PLCN_polyglotException">
+				<simple>true</simple>
+			</setHeader>
+			<bean ref="pelicanController" method="exceptionLogger" />
+			<bean id="jspPopulateDataDBRoute" ref="jspExecute"
+				method="executeWithHazelCastInstance(${exchange},populateMetaData)" />
+			<to uri="direct://dbOperationCamelContext" />
+			<log message="MESSAGE MOVED TO ERRORQ" />
+			<to uri="aceq://endpointwrite?queueID=ERRORQ&amp;pollStatus=69" />
+			<to uri="genaudit://route1Audit" />
+			<stop/>
+		</onException>
+		
+		<onException id="genericException">
+			<exception>java.lang.Exception</exception>
+			<!--<redeliveryPolicy
+				maximumRedeliveries="0" />-->
+			<handled>
+				<camel:constant>true</camel:constant>
+			</handled>
+			<log loggingLevel="INFO" message="IN Generic Exception exception" />
+			<log loggingLevel="TRACE" message="body in Generic Exception: ${body}" />
+			<setHeader headerName="exception">
+				<simple>${exception.stacktrace}</simple>
+			</setHeader>
+			<setHeader headerName="PLCN_queue">
+				<simple>ERRORQ</simple>
+			</setHeader>
+			<setHeader headerName="PLCN_validFlag">
+				<simple>false</simple>
+			</setHeader>
+			<setHeader headerName="PLCN_GENERIC_EXCEPTION">
+				<constant>true</constant>
+			</setHeader>
+			<bean ref="pelicanController" method="exceptionLogger" />
+			<log loggingLevel="TRACE" message="header after Generic Exception : ${headers}" />	
+			<bean id="jspPopulateDataDBRoute" ref="jspExecute"
+				method="executeWithHazelCastInstance(${exchange},populateMetaData)" />
+			<to uri="direct://dbOperationCamelContext" />
+			<to uri="aceq://endpointwrite?queueID=ERRORQ&amp;pollStatus=69" />
+			<to uri="genaudit://route1Audit" />
+			<log loggingLevel="INFO" message="Going to update to DB" />
+			<stop />
+		</onException>
+
+		<!-- <onException>
+			<exception>org.xml.sax.SAXParseException</exception>
+			<handled>
+			<constant>true</constant>
+			</handled>
+			<log message="In SAXParseException, exception occured..." />
+			<setHeader headerName="exception">
+				<simple>${exception.stacktrace}</simple>
+			</setHeader>
+			<setHeader headerName="PLCN_queue">
+				<simple>ERRORQ</simple>
+			</setHeader>			
+			<setHeader headerName="PLCN_validFlag">
+				<simple>false</simple>
+			</setHeader>
+			<setHeader headerName="PLCN_polyglotException">
+				<simple>true</simple>
+			</setHeader>
+			<bean ref="pelicanController" method="exceptionLogger" />
+			<bean id="jspPopulateDataDBRoute" ref="jspExecute"
+				method="executeWithHazelCastInstance(${exchange},populateMetaData)" />
+			<to uri="direct://dbOperationCamelContext" />
+			<log message="MESSAGE MOVED TO ERRORQ" />
+			<to uri="aceq://endpointwrite?queueID=ERRORQ&amp;pollStatus=69" />
+			<to uri="genaudit://route1Audit" />
+			<stop/>
+		</onException> -->		
+		
+		<route id="dbOperationCamelContext">
+			<from uri="direct://dbOperationCamelContext" />
+			<bean id="jspPopulateDataSetAuthViolation" ref="jspExecute"
+				method="executeWithHazelCastInstance(${exchange},setExceptionViolation)" />
+			<bean id="jspPopulateDataCreateResponseCamelContext" ref="jspExecute"
+				method="executeWithHazelCastInstance(${exchange},createResponse)" />
+			<bean id="jspPopulateDatadbOperationCamelContext" ref="jspExecute"
+				method="executeWithHazelCastInstance(${exchange},dbOperation)" />
+		</route>
+
+	</camelContext>
+	
+</beans>
