@@ -1,0 +1,23 @@
+(FUNCTION MULTI-TEST-ACCOUNTING REFNO)
+(
+	(GLOBALVAR GV_RESPONSEXML)
+	(IF (ISPATTERNPRESENT (UPPER REFNO) "HOLD")
+		THEN(
+			(ASSIGN GV_RESPONSEXML "<DebitOperationResponse><DebitOperationResult><a:ResultStatus>HOLD</a:ResultStatus><a:BANKAOperationNumber>0</a:BANKAOperationNumber><a:Fees i:nil=\"true\"/>-<a:Errors>-<a:Error><a:ErrorCode>GBM1879</a:ErrorCode><a:ErrorText>GBM1879-ALERT: Account 00000068010001 in status of Watch</a:ErrorText></a:Error>-<a:Error><a:ErrorCode>GBM1879</a:ErrorCode><a:ErrorText>GBM1879-ALERT: Account 00000068010001 in status of Watch</a:ErrorText></a:Error></a:Errors></DebitOperationResult></DebitOperationResponse></s:Body></s:Envelope>")
+			(RETURN "HOLD")
+		    )
+	)
+	(IF (ISPATTERNPRESENT (UPPER REFNO) "REJECT")
+		THEN(
+			(ASSIGN GV_RESPONSEXML "<s:Body><DebitOperationResponse><DebitOperationResult><a:ResultStatus>REJECT</a:ResultStatus><a:BANKAOperationNumber>0</a:BANKAOperationNumber><a:Fees i:nil=\"true\"/>-<a:Errors>-<a:Error><a:ErrorCode>GBM1879</a:ErrorCode><a:ErrorText>GBM1879-ALERT: Account 00000068010001 in status of Watch</a:ErrorText></a:Error>-<a:Error><a:ErrorCode>GBM1879</a:ErrorCode><a:ErrorText>GBM1879-ALERT: Account 00000068010001 in status of Watch</a:ErrorText></a:Error></a:Errors></DebitOperationResult></DebitOperationResponse></s:Body></s:Envelope>")
+			(RETURN "REJECT")
+		    )
+	)
+	(IF (ISPATTERNPRESENT (UPPER REFNO) "SUCCESS")
+		THEN(
+			(ASSIGN GV_RESPONSEXML "<DebitOperationResponse>-<DebitOperationResult><a:ResultStatus>SUCCESS</a:ResultStatus><a:BANKAOperationNumber>0</a:BANKAOperationNumber><a:Fees i:nil=\"true\"/>-<a:Errors>-<a:Error><a:ErrorCode>GBM1879</a:ErrorCode><a:ErrorText>GBM1879-ALERT: Account 00000068010001 in status of Watch</a:ErrorText></a:Error>-<a:Error><a:ErrorCode>GBM1879</a:ErrorCode><a:ErrorText>GBM1879-ALERT: Account 00000068010001 in status of Watch</a:ErrorText></a:Error></a:Errors></DebitOperationResult></DebitOperationResponse></s:Body></s:Envelope>")
+			(RETURN "SUCCESS")
+		    )
+	)
+	(RETURN "SUCCESS")
+)

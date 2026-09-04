@@ -1,0 +1,4541 @@
+;Copyright Ace Software Solutions
+
+(ENV "ENV-WF-PAY"
+    (PLATFORM  "WIN32")
+    (DFSM 
+        ("ACEPAY"   "..\\transenv\\swftdfsm.dat")
+        ("SWFBLK"   "..\\transenv\\swbldfsm.dat")
+        ("SWIFT_EXTRA"   "..\\transenv\\swftdfsm.dat")
+        ("LINE"   "..\\transenv\\linedfsm.dat")
+        ("SWIFT"   "..\\transenv\\swftdfsm.dat")
+        ("XML"   "..\\transenv\\xmldfsm.dat")
+        ("STD-XML"   "NODFSM")
+        ("BTRS"   "..\\transenv\\btrsdfsm.dat")
+        ("RECORD"   "NODFSM")
+    )
+    (CHARACTERSET 
+       ; ("ACEPAY"   "a" "b" "c" "d" "e" "f" "g" "h" "i" "j" "k" "l" "m" "n" "o" "p" "q" "r" "s" "t" "u" "v" "w" "x" "y" "z" "A" "B" "C" "D" "E" "F" "G" "H" "I" "J" "K" "L" "M" "N" "O" "P" "Q" "R" "S" "T" "U" "V" "W" "X" "Y" "Z" "0" "1" "2" "3" "4" "5" "6" "7" "8" "9" #\' #\( #\) #\+ #\, #\- #\. #\space #\/ #\: #\} #\# #\* #\$ #\& #\" #\; #\% #\~ #\< #\= #\> #\` #\_ #\[ #\^ #\| #\! #\] #\{ #\? #\@ "<LF>" #\\ "<LF>" )
+	    ("ACEPAY"   "a" "b" "c" "d" "e" "f" "g" "h" "i" "j" "k" "l" "m" "n" "o" "p" "q" "r" "s" "t" "u" "v" "w" "x" "y" "z" "A" "B" "C" "D" "E" "F" "G" "H" "I" "J" "K" "L" "M" "N" "O" "P" "Q" "R" "S" "T" "U" "V" "W" "X" "Y" "Z" "0" "1" "2" "3" "4" "5" "6" "7" "8" "9" #\' #\( #\) #\+ #\, #\- #\. #\space #\/ #\: #\} #\# #\* #\$ #\& #\" #\; #\% #\~ #\< #\= #\> #\` #\_ #\[ #\^ #\| #\! #\] #\{ #\? #\@ "<CR>" #\\ "<LF>" )
+		("SWIFT_EXTRA"   "a" "b" "c" "d" "e" "f" "g" "h" "i" "j" "k" "l" "m" "n" "o" "p" "q" "r" "s" "t" "u" "v" "w" "x" "y" "z" "A" "B" "C" "D" "E" "F" "G" "H" "I" "J" "K" "L" "M" "N" "O" "P" "Q" "R" "S" "T" "U" "V" "W" "X" "Y" "Z" "0" "1" "2" "3" "4" "5" "6" "7" "8" "9" #\/ #\- #\? #\: #\( #\) #\. #\, #\' #\+ #\{ #\} "<LF>" "<CR>" #\space #\* #\[ #\\ #\] #\^ #\{ #\| #\} #\~ #\$ #\% #\& #\" #\# #\! #\; #\@ #\< #\= #\>)
+        ("LINE"   "a" "b" "c" "d" "e" "f" "g" "h" "i" "j" "k" "l" "m" "n" "o" "p" "q" "r" "s" "t" "u" "v" "w" "x" "y" "z" "A" "B" "C" "D" "E" "F" "G" "H" "I" "J" "K" "L" "M" "N" "O" "P" "Q" "R" "S" "T" "U" "V" "W" "X" "Y" "Z" "0" "1" "2" "3" "4" "5" "6" "7" "8" "9" #\' #\( #\) #\+ #\, #\- #\. #\space #\/ #\: #\? #\, #\{ #\} #\! #\" #\# #\$ #\% #\& #\* #\; #\< #\= #\> #\@ #\` #\_ #\, #\] #\^ #\| "<LF>" "<CR>")
+		("SWIFT"   "a" "b" "c" "d" "e" "f" "g" "h" "i" "j" "k" "l" "m" "n" "o" "p" "q" "r" "s" "t" "u" "v" "w" "x" "y" "z" "A" "B" "C" "D" "E" "F" "G" "H" "I" "J" "K" "L" "M" "N" "O" "P" "Q" "R" "S" "T" "U" "V" "W" "X" "Y" "Z" "0" "1" "2" "3" "4" "5" "6" "7" "8" "9" #\/ #\- #\? #\: #\( #\) #\. #\, #\' #\+ #\{ #\} "<LF>" "<CR>" #\space #\*)
+		("XML"   "a" "b" "c" "d" "e" "f" "g" "h" "i" "j" "k" "l" "m" "n" "o" "p" "q" "r" "s" "t" "u" "v" "w" "x" "y" "z" "A" "B" "C" "D" "E" "F" "G" "H" "I" "J" "K" "L" "M" "N" "O" "P" "Q" "R" "S" "T" "U" "V" "W" "X" "Y" "Z" "0" "1" "2" "3" "4" "5" "6" "7" "8" "9" #\! #\" #\# #\$ #\% #\& #\' #\( #\) #\* #\+ #\, #\- #\. #\space #\/ #\: #\; #\< #\= #\> #\? #\@ #\` #\_ "<LF>" "<CR>" #\[ #\\ #\] #\^ #\{ #\| #\} #\~ )
+		("STD-XML"   "a" "b" "c" "d" "e" "f" "g" "h" "i" "j" "k" "l" "m" "n" "o" "p" "q" "r" "s" "t" "u" "v" "w" "x" "y" "z" "A" "B" "C" "D" "E" "F" "G" "H" "I" "J" "K" "L" "M" "N" "O" "P" "Q" "R" "S" "T" "U" "V" "W" "X" "Y" "Z" "0" "1" "2" "3" "4" "5" "6" "7" "8" "9" #\! #\" #\# #\$ #\% #\& #\' #\( #\) #\* #\+ #\, #\- #\. #\space #\/ #\: #\; #\< #\= #\> #\? #\@ #\` #\_ "<LF>" "<CR>" #\[ #\\ #\] #\^ #\{ #\| #\} #\~  #\tab)
+        ;("BTRS"   "a" "b" "c" "d" "e" "f" "g" "h" "i" "j" "k" "l" "m" "n" "o" "p" "q" "r" "s" "t" "u" "v" "w" "x" "y" "z" "A" "B" "C" "D" "E" "F" "G" "H" "I" "J" "K" "L" "M" "N" "O" "P" "Q" "R" "S" "T" "U" "V" "W" "X" "Y" "Z" "0" "1" "2" "3" "4" "5" "6" "7" "8" "9" #\' #\( #\) #\+ #\, #\- #\. #\space #\/ #\: #\? #\, #\{ #\} #\! #\" #\# #\$ #\% #\& #\* #\; #\< #\= #\> #\@ #\` #\_ #\, #\] #\^ #\| "<LF>" "<CR>")
+		("BTRS"   "a" "b" "c" "d" "e" "f" "g" "h" "i" "j" "k" "l" "m" "n" "o" "p" "q" "r" "s" "t" "u" "v" "w" "x" "y" "z" "A" "B" "C" "D" "E" "F" "G" "H" "I" "J" "K" "L" "M" "N" "O" "P" "Q" "R" "S" "T" "U" "V" "W" "X" "Y" "Z" "0" "1" "2" "3" "4" "5" "6" "7" "8" "9" #\' #\( #\) #\+ #\, #\- #\. #\space #\/ #\: #\? #\, #\{ #\} #\! #\" #\# #\$ #\% #\& #\* #\; #\< #\= #\> #\@ #\` #\_ #\\ #\] #\^ #\| #\~ "<LF>" "<CR>" #\space)
+    )
+    (UNMATCHEDCHECK "Y")
+    ;(MSGDUMP "SUBFIELD")
+	(MSGDUMP "FULL")
+    
+    (FILES 
+        (CLT   "..\\env-wf-ppay\\codelist.dat")
+        (SFLD   "..\\env-wf-ppay\\subfield.dat")
+        (PATTERNS   "..\\env-wf-ppay\\patterns.dat")
+        (TBL   "..\\env-wf-ppay\\tablelst.dat")
+        (RULECONTROL   "..\\env-wf-ppay\\xform.txt")
+        (FLOWS   "..\\env-wf-ppay\\flows.xml")
+        (FLD   "..\\env-wf-ppay\\field.dat")
+        (SEQ   "..\\env-wf-ppay\\sequence.dat")
+        (CODES   "..\\env-wf-ppay\\codes.dat")
+        (TRANS   "..\\env-wf-ppay\\trans.dat")
+        (MSG   "..\\env-wf-ppay\\message.dat")
+        (ELE   "..\\env-wf-ppay\\elements.dat")
+    )
+    
+    (CLASSIFICATION
+    )
+    (STREAMS 
+        (INSTREAMS 
+            ("DB-MAIN-IP"  DB
+                
+                (BUFFERSIZE  250000)
+                
+                (VALIDCHAR 1)
+                
+                (INTERFACE  LIB  "")
+                
+                (CONVERT   N)
+                
+                
+                
+                (FUNCTIONS
+                )
+                
+                (INFO
+                    (DBTYPE  0)
+                    (VERSION  "")
+                    (SERVERNAME  "jdbc:oracle:thin:@PELICANORACLE:1521:ORCL")
+                    (MESSAGE_TYPE 0)
+                    (TOKENDELIMITER "")
+                    (EXECUTE_READ  BATCH)
+                    (REUSE_RESULTSET  Y)
+                    (TABLENAME   "")
+                    (COLUMNNAME  "")
+                    (QUERYSTRING "")
+                    (TRPROCESS  N)
+                    (STREAM_VARIABLE_TABLE
+                        (VARIABLE_INFO
+                            (NAME       "ACE_QUEUE_ID")
+                            (TABLENAME  "MSGDB")
+                            (COLUMNNAME "QUEUEID")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    1)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "ACE_MESSAGE_NO")
+                            (TABLENAME  "MSGDB")
+                            (COLUMNNAME "MESSAGENO")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    2)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "MSGDBID")
+                            (TABLENAME  "MSGDB")
+                            (COLUMNNAME "MSGDB_ID")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    3)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "QM")
+                            (TABLENAME  "MSGDB")
+                            (COLUMNNAME "MSG_MODE_IN")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    4)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "CUSTOM1")
+                            (TABLENAME  "MSGDB")
+                            (COLUMNNAME "CUSTOM1")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    5)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "MESSAGE_DIRECTION")
+                            (TABLENAME  "MSGDB")
+                            (COLUMNNAME "MESSAGEDIRECTION")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    6)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "MESSAGE")
+                            (TABLENAME  "MESSAGE")
+                            (COLUMNNAME "MESSAGE")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    7)
+                            (INCLUDE_IN_MSG    Y)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "MSGTYPE")
+                            (TABLENAME  "MSGDB")
+                            (COLUMNNAME "MESSAGECLASSTYPE")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    8)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "INSTANCEID")
+                            (TABLENAME  "MSGDB")
+                            (COLUMNNAME "INSTANCEID")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    9)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "INSTITUTIONID")
+                            (TABLENAME  "MSGDB")
+                            (COLUMNNAME "INSTITUTIONID")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    10)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "GV_STATUS_FRM_DB")
+                            (TABLENAME  "GV_STATUS_FRM_DB")
+                            (COLUMNNAME "GV_STATUS_FRM_DB")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    13)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "GLOBVAR")
+                            (TYPE     2)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "GV_COMMENTS_FRM_DB")
+                            (TABLENAME  "GV_COMMENTS_FRM_DB")
+                            (COLUMNNAME "GV_COMMENTS_FRM_DB")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    14)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "GLOBVAR")
+                            (TYPE     2)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "MDBOUT_MODE_ONWARD")
+                            (TABLENAME  "MSGDB_OUTPUT")
+                            (COLUMNNAME "MDBOUT_MODE_ONWARD")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    16)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "MDBOUT_MODE_MT191")
+                            (TABLENAME  "MSGDB_OUTPUT")
+                            (COLUMNNAME "MDBOUT_MODE_MT191")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    17)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "DB_CHK_SUM")
+                            (TABLENAME  "MSGDB")
+                            (COLUMNNAME "CUSTOM44")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    18)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "PREVQUEUEID")
+                            (TABLENAME  "MSGDB")
+                            (COLUMNNAME "PREVQUEUEID")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    19)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "COMMENTS_FOR_BLOB6")
+                            (TABLENAME  "MSGBLOCKS")
+                            (COLUMNNAME "MESSAGE")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    20)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "GV_DUPL_DB_FLAG")
+                            (TABLENAME  "MSGDB")
+                            (COLUMNNAME "DUPLICATE_RECORD_KEY")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    21)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "CUSTOM5")
+                            (TABLENAME  "MSGDB")
+                            (COLUMNNAME "CUSTOM5")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    22)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "GV_AUTO_RP_MSG")
+                            (TABLENAME  "")
+                            (COLUMNNAME "GV_AUTO_RP_MSG")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    23)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "GLOBVAR")
+                            (TYPE     2)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "GV_FIRST_WARN")
+                            (TABLENAME  "")
+                            (COLUMNNAME "GV_FIRST_WARN")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    24)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "GLOBVAR")
+                            (TYPE     2)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "GV_PRIORITY")
+                            (TABLENAME  "")
+                            (COLUMNNAME "GV_PRIORITY")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    25)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "GLOBVAR")
+                            (TYPE     2)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "ERR_COMMENTS1")
+                            (TABLENAME  "DUAL")
+                            (COLUMNNAME "ERR_COMMENTS1")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    26)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "STRLENGTH")
+                            (TABLENAME  "DUAL")
+                            (COLUMNNAME "STRLENGTH")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    27)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "TRANSERRORFLAG")
+                            (TABLENAME  "DUAL")
+                            (COLUMNNAME "TRANSERRORFLAG")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    28)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "TRANSERRORPATH")
+                            (TABLENAME  "DUAL")
+                            (COLUMNNAME "TRANSERRORPATH")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    29)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "MSG_SEGR")
+                            (TABLENAME  "MSGDB")
+                            (COLUMNNAME "MSGSEGR")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    30)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "PRIORITYAMOUNT")
+                            (TABLENAME  "MSGDB")
+                            (COLUMNNAME "PRIORITYAMOUNT")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    31)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "PRIORITYAMOUNTNUM")
+                            (TABLENAME  "MSGDB")
+                            (COLUMNNAME "PRIORITYAMOUNTNUM")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    32)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "ORG_AMT1")
+                            (TABLENAME  "MSGDB_PAY")
+                            (COLUMNNAME "MDBPAY_ORI_VAL_AMT")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    33)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "ORG_CURR")
+                            (TABLENAME  "MSGDB_PAY")
+                            (COLUMNNAME "MDBPAY_CHARGE_CODE")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    34)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "CHANNEL_ID_TARGET")
+                            (TABLENAME  "MSGDB")
+                            (COLUMNNAME "CHANNEL_ID_TARGET")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    35)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "RET_CNT")
+                            (TABLENAME  "MSGDB")
+                            (COLUMNNAME "CUSTOM4")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    36)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "XML_REQUEST")
+                            (TABLENAME  "MSGBLOCKS")
+                            (COLUMNNAME "MESSAGE")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    37)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "XML_RESPONSE")
+                            (TABLENAME  "MSGBLOCKS")
+                            (COLUMNNAME "MESSAGE")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    38)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "XML_REQUEST_CHARGES")
+                            (TABLENAME  "MSGBLOCKS")
+                            (COLUMNNAME "MESSAGE")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    39)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "XML_RESPONSE_CHARGES")
+                            (TABLENAME  "MSGBLOCKS")
+                            (COLUMNNAME "MESSAGE")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    40)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "MUR_ID")
+                            (TABLENAME  "MSGDB")
+                            (COLUMNNAME "CUSTOM9")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    41)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "CUSTOM48")
+                            (TABLENAME  "MSGDB")
+                            (COLUMNNAME "CUSTOM48")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    42)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "SEQ_NO1")
+                            (TABLENAME  "DUAL")
+                            (COLUMNNAME "SEQ_NO1")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    43)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "CUSTOM13_STRING")
+                            (TABLENAME  "MSGDB")
+                            (COLUMNNAME "CUSTOM13")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    44)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "CHANNEL_ID_SOURCE")
+                            (TABLENAME  "MSGDB")
+                            (COLUMNNAME "CHANNEL_ID_SOURCE")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    45)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "XML_REQUEST_EXCH_DR")
+                            (TABLENAME  "MSGBLOCKS")
+                            (COLUMNNAME "MESSAGE")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    46)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "XML_RESPONSE_EXCH_DR")
+                            (TABLENAME  "MSGBLOCKS")
+                            (COLUMNNAME "MESSAGE")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    47)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "XML_REQUEST_EXCH_CR")
+                            (TABLENAME  "MSGBLOCKS")
+                            (COLUMNNAME "MESSAGE")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    48)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "XML_RESPONSE_EXCH_CR")
+                            (TABLENAME  "MSGBLOCKS")
+                            (COLUMNNAME "MESSAGE")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    49)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "XML_REQUEST_EXCH_DR_CHG")
+                            (TABLENAME  "MSGBLOCKS")
+                            (COLUMNNAME "MESSAGE")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    50)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "XML_RESPONSE_EXCH_DR_CHG")
+                            (TABLENAME  "MSGBLOCKS")
+                            (COLUMNNAME "MESSAGE")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    51)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "CUSTOM5_ORIG")
+                            (TABLENAME  "MSGDB")
+                            (COLUMNNAME "CUSTOM5")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    52)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "QUEUEID")
+                            (TABLENAME  "MSGDB")
+                            (COLUMNNAME "QUEUEID")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    53)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "RECEIVER")
+                            (TABLENAME  "MSGDB")
+                            (COLUMNNAME "RECEIVER")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    54)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "SENDER")
+                            (TABLENAME  "MSGDB")
+                            (COLUMNNAME "SENDER")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    55)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "AMOUNT_NUM_TO_DB")
+                            (TABLENAME  "MSGDB")
+                            (COLUMNNAME "PRIORITYAMOUNTNUM")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    56)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "AMOUNT_TO_DB")
+                            (TABLENAME  "MSGDB")
+                            (COLUMNNAME "PRIORITYAMOUNT")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    57)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "CURRENCY_TO_DB")
+                            (TABLENAME  "MSGDB")
+                            (COLUMNNAME "CURRENCY")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    58)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "VALUEDATE")
+                            (TABLENAME  "MSGDB")
+                            (COLUMNNAME "PRIORITYDATE")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    59)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "TRANSREFNO")
+                            (TABLENAME  "MSGDB")
+                            (COLUMNNAME "TRANSREFNO")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    60)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "MSG_DIRECTION")
+                            (TABLENAME  "MSGDB")
+                            (COLUMNNAME "MESSAGEDIRECTION")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    61)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "COMMENTS_SET_DB")
+                            (TABLENAME  "MSGBLOCKS")
+                            (COLUMNNAME "MESSAGE")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    62)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "COMMENTS")
+                            (TABLENAME  "MSGDB")
+                            (COLUMNNAME "COMMENTS")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    63)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "CUSTOM19")
+                            (TABLENAME  "MSGDB")
+                            (COLUMNNAME "CUSTOM19")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    64)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "CUSTOM43")
+                            (TABLENAME  "MSGDB")
+                            (COLUMNNAME "CUSTOM43")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    65)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "RETRY_CNT_WRITE")
+                            (TABLENAME  "MSGDB")
+                            (COLUMNNAME "CUSTOM4")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    66)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "STATUS")
+                            (TABLENAME  "MSGDB")
+                            (COLUMNNAME "STATUS")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    67)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "COV_MSG_TYPE")
+                            (TABLENAME  "MSGDB")
+                            (COLUMNNAME "MESSAGECLASSTYPE")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    68)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "FIRST_WARN")
+                            (TABLENAME  "MSGBLOCKS")
+                            (COLUMNNAME "MESSAGE")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    69)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "ACCOUNTNUMBER")
+                            (TABLENAME  "MSGDB_PAY")
+                            (COLUMNNAME "MDBPAY_CUSTACCNO")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    70)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "BEN_CUST")
+                            (TABLENAME  "MSGDB_PAY")
+                            (COLUMNNAME "MDBPAY_BENEFNAME")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    71)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "CORRESPONDENT")
+                            (TABLENAME  "MSGDB")
+                            (COLUMNNAME "CORRESPONDENT")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    72)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "CUSTOMER")
+                            (TABLENAME  "MSGDB")
+                            (COLUMNNAME "CUSTOMER")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    73)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "COUNTRY_CODE")
+                            (TABLENAME  "MSGDB")
+                            (COLUMNNAME "COUNTRY_CODE")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    74)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "NEW_CHK_SUM")
+                            (TABLENAME  "MSGDB")
+                            (COLUMNNAME "HASHCODE2")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    75)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "CUSTOM44")
+                            (TABLENAME  "MSGDB")
+                            (COLUMNNAME "CUSTOM44")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    76)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "EXCG_RT_32_T_ACC")
+                            (TABLENAME  "MSGDB_PAY")
+                            (COLUMNNAME "MDBPAY_EXCH_RATE")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    77)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "ACCOUNT")
+                            (TABLENAME  "MSGDB_PAY")
+                            (COLUMNNAME "MDBPAY_BENF_TYPE")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    78)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "MODULE1")
+                            (TABLENAME  "GENAUDIT")
+                            (COLUMNNAME "MODULENAME")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    79)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "MODULE2")
+                            (TABLENAME  "GENAUDIT")
+                            (COLUMNNAME "MODULENAME")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    80)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "MODULE3")
+                            (TABLENAME  "GENAUDIT")
+                            (COLUMNNAME "MODULENAME")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    81)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "MODULE4")
+                            (TABLENAME  "GENAUDIT")
+                            (COLUMNNAME "MODULENAME")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    82)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "ACTION1")
+                            (TABLENAME  "GENAUDIT")
+                            (COLUMNNAME "ACTION")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    83)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "ACTION2")
+                            (TABLENAME  "GENAUDIT")
+                            (COLUMNNAME "ACTION")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    84)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "ACTION3")
+                            (TABLENAME  "GENAUDIT")
+                            (COLUMNNAME "ACTION")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    85)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "ACTION4")
+                            (TABLENAME  "GENAUDIT")
+                            (COLUMNNAME "ACTION")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    86)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "AUDIT_TEXT1")
+                            (TABLENAME  "GENAUDIT")
+                            (COLUMNNAME "AUDIT_TEXT")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    87)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "AUDIT_TEXT2")
+                            (TABLENAME  "GENAUDIT")
+                            (COLUMNNAME "AUDIT_TEXT")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    88)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "AUDIT_TEXT3")
+                            (TABLENAME  "GENAUDIT")
+                            (COLUMNNAME "AUDIT_TEXT")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    89)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "AUDIT_TEXT4")
+                            (TABLENAME  "GENAUDIT")
+                            (COLUMNNAME "AUDIT_TEXT")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    90)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "RELEASE_DATE")
+                            (TABLENAME  "MSGDB")
+                            (COLUMNNAME "CUSTOM1")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    91)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "DUPL_FLAG")
+                            (TABLENAME  "MSGDB")
+                            (COLUMNNAME "CUSTOM5")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    92)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "CUSTOM5_DUPL")
+                            (TABLENAME  "MSGDB")
+                            (COLUMNNAME "CUSTOM5")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    93)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "GV_CUSTOM6")
+                            (TABLENAME  "MSGDB")
+                            (COLUMNNAME "CUSTOM6")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    94)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "GV_MATCH_STATUS")
+                            (TABLENAME  "MSGDB")
+                            (COLUMNNAME "CUSTOM7")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    95)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "FLD70")
+                            (TABLENAME  "MSGDB")
+                            (COLUMNNAME "CUSTOM18")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    96)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "CUSTOM8")
+                            (TABLENAME  "MSGDB")
+                            (COLUMNNAME "CUSTOM8")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    97)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "CUSTOM48_DB")
+                            (TABLENAME  "MSGDB")
+                            (COLUMNNAME "CUSTOM48")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    98)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "CUSTOM5_ORIG")
+                            (TABLENAME  "MSGDB")
+                            (COLUMNNAME "CUSTOM5")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    99)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "PARENT_MSGDB_ID")
+                            (TABLENAME  "MSGDB")
+                            (COLUMNNAME "MSGDB_ID")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    100)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "XML_BLOB_VAL")
+                            (TABLENAME  "MSGBLOCKS")
+                            (COLUMNNAME "MESSAGE")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    101)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "CUSTOM5_PR")
+                            (TABLENAME  "MSGDB")
+                            (COLUMNNAME "CUSTOM5_PR")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    102)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "INSTANCEID")
+                            (TABLENAME  "MSGDB")
+                            (COLUMNNAME "INSTANCEID")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    103)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "MSG_TRANS_DEBITOR")
+                            (TABLENAME  "MSGDB")
+                            (COLUMNNAME "ACCOUNT_DR")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    104)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "MSG_TRANS_CREDITOR")
+                            (TABLENAME  "MSGDB")
+                            (COLUMNNAME "ACCOUNT_CR")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    105)
+                            (INCLUDE_IN_MSG    N)
+                            (EXCLUDE_FROM_HEADER    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                    )
+                    (EXECUTE
+                        (QUERY "SELECT_FROM_MSGDB" 1 "SELECT A.CUSTOM13 CUSTOM13_STRING,TO_CHAR (A.CUSTOM48, 'YYYYMMDD') CUSTOM48, A.PRIORITYAMOUNT PRIORITYAMOUNT, A.PRIORITYAMOUNTNUM PRIORITYAMOUNTNUM, A. PREVQUEUEID PREVQUEUEID, A.MESSAGENO ACE_MESSAGE_NO, A.QUEUEID ACE_QUEUE_ID, A.MSGDB_ID MSGDBID, A.STATUS GV_STATUS_FRM_DB, A.MSG_MODE_IN QM, A.MESSAGEDIRECTION MESSAGE_DIRECTION, A.INSTITUTIONID INSTITUTIONID, A.CUSTOM1 CUSTOM1,A.CUSTOM4 RET_CNT, A.CUSTOM5 CUSTOM5, (SELECT MESSAGE FROM MSGBLOCKS C WHERE C.MSGDB_ID = A.MSGDB_ID  AND MSGBLOCKTYPE = 2) MESSAGE, A.CUSTOM44 CUSTOM44, A.DUPLICATE_RECORD_KEY GV_DUPL_DB_FLAG, (SELECT MESSAGE FROM MSGBLOCKS C WHERE C.MSGDB_ID = A.MSGDB_ID AND MSGBLOCKTYPE = 6) GV_COMMENTS_FRM_DB, MSGSEGR MSG_SEGR, A.CHANNEL_ID_SOURCE CHANNEL_ID_SOURCE, A.MESSAGECLASSTYPE MSGTYPE FROM MSGDB A   WHERE   A.QUEUEID IN ('PAYMSGIN','CRPMSGIN' ) AND A.STATUS in (69, 86, 93)")
+                    )
+                    (ONSUCCESS
+                    )
+                    (ONERROR
+                        (QUERY "INSERT_GENAUDIT"  7  "INSERT INTO GENAUDIT (MESSAGENO, AUDITDATETIME, SEQUENCENO, QUEUEID, APPLICATION, MODULENAME, ACTION,AUDITTEXT,INSTITUTIONID) VALUES (LPAD(@ACE_MESSAGE_NO,12,'0'), SYSDATE, @SEQ_NO1, 'PAYREPRQ', 'WFSVS01', 'WRKFLOW', 'TRANSLATE','Message is processed and written into '|| 'FILLERRQ'||' Queue',@INSTITUTIONID)")
+                        (QUERY "SELECT_DUAL"  1  "SELECT LENGTH(@ERR_COMMENTS) STRLENGTH, SUBSTR(@ERR_COMMENTS, 1,4) ERR_COMMENTS1 , SUBSTR(@ERR_COMMENTS, 5,1) TRANSERRORFLAG, SUBSTR(@ERR_COMMENTS, 6,((@STRLENGTH) -5)) TRANSERRORPATH FROM DUAL")
+                        (QUERY "UPDATE_MSGBLOCKS"  5  "UPDATE MSGBLOCKS SET MESSAGE=@COMMENTS_FOR_BLOB6 WHERE MSGBLOCKS.MSGDB_ID=@MSGDBID AND MSGBLOCKTYPE=6")
+                        (QUERY "SELECT_DUAL2"  3  "SELECT TO_CHAR(SYSDATE, 'YYYYMMDD') DATE_VAR, TO_CHAR(SYSDATE, 'HH24MISS') TIME_VAR,TO_CHAR(SYSTIMESTAMP, 'FF3') SEQ_NO1 FROM DUAL")
+                        (QUERY "CALL_PROCEDURE"  6  "CALL Upsert_Tech_Err_Comments(@MSGDBID,@TECH_ERR_COMMENTS)")
+                        (QUERY "UPDATE_MSGDB"  4  "UPDATE MSGDB SET MESSAGECLASSTYPE= DECODE(@MSGTYPE,NULL,'UNKNOWN',@MSGTYPE),QUEUEID = 'FILLERRQ', STATUS= 69 ,COMMENTS = @ERR_COMMENTS WHERE MSGDB_ID = @MSGDBID AND INSTANCEID = @ACE_INSTANCE_ID")
+                        (QUERY "SELECT_DUAL1"  2  "SELECT SUBSTR(@ERR_COMMENTS, 6,((@STRLENGTH) -5)) TRANSERRORPATH FROM DUAL")
+                    )
+                    (ONROLLBACK
+                    )
+                    (ONCOMMIT
+                    )
+                    (ONSTREAMTRANSACTIONPHASETWOCOMMIT
+                    )
+                    (ONTRANSCOMMIT
+                    )
+                    (ONTRANSROLLBACK
+                    )
+                )
+            )
+            ("MQ-MAIN-IP-1"  MQ
+                
+                (BUFFERSIZE  250000)
+                
+                (VALIDCHAR 1)
+                
+                (INTERFACE  LIB  "")
+                
+                (CONVERT   N)
+                
+                (FUNCTIONS
+                )
+                
+                
+                
+                (INFO
+                    (QUEUEMANAGERNAME  "QM_PELPAY")
+                    (QUEUENAME         "Q_IN_BO1_PAYMT")
+                    (ONERRORQUEUENAME "Q_IN_ERR_PAYMT")
+                    (MESSAGETYPE       "")
+                    (HOST              "PELICANMQ")
+                    (PORT              "1418")
+                    (CHANNEL           "CH_PELICAN_SRVRCONN")
+                    (INCLUDE_FOR_DATAGRAM    Y)
+                    (INCLUDE_FOR_REPORT    Y)
+                    (INCLUDE_FOR_REPLY    Y)
+                    (INCLUDE_FOR_REQUEST    Y)
+                    (STREAM_VARIABLE_TABLE
+                        (VARIABLE_INFO
+                            (NAME       "MESSAGE_TYPE")
+                            (VALUE		 "")
+                            (PREFIX     "")
+                            (SUFFIX     "|")
+                            (ORDERNO    1)
+                            (INCLUDE_IN_MSG    Y)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "MESSAGE_PRIORITY")
+                            (VALUE		 "")
+                            (PREFIX     "")
+                            (SUFFIX     "|")
+                            (ORDERNO    2)
+                            (INCLUDE_IN_MSG    Y)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "MESSAGE_PERSISTENCE")
+                            (VALUE		 "")
+                            (PREFIX     "")
+                            (SUFFIX     "|")
+                            (ORDERNO    3)
+                            (INCLUDE_IN_MSG    Y)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "PUT_DATE")
+                            (VALUE		 "")
+                            (PREFIX     "")
+                            (SUFFIX     "|")
+                            (ORDERNO    4)
+                            (INCLUDE_IN_MSG    Y)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "PUT_TIME")
+                            (VALUE		 "")
+                            (PREFIX     "")
+                            (SUFFIX     "|")
+                            (ORDERNO    5)
+                            (INCLUDE_IN_MSG    Y)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "EXPIRY_INTERVAL")
+                            (VALUE		 "")
+                            (PREFIX     "")
+                            (SUFFIX     "|")
+                            (ORDERNO    6)
+                            (INCLUDE_IN_MSG    Y)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "REPLY_TO_QUEUE")
+                            (VALUE		 "")
+                            (PREFIX     "")
+                            (SUFFIX     "|")
+                            (ORDERNO    7)
+                            (INCLUDE_IN_MSG    Y)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "REPLY_TO_QUEUE_MANAGER")
+                            (VALUE		 "")
+                            (PREFIX     "")
+                            (SUFFIX     "|")
+                            (ORDERNO    8)
+                            (INCLUDE_IN_MSG    Y)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "BACKOUT_COUNT")
+                            (VALUE		 "")
+                            (PREFIX     "")
+                            (SUFFIX     "|")
+                            (ORDERNO    9)
+                            (INCLUDE_IN_MSG    Y)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "REPORT")
+                            (VALUE		 "")
+                            (PREFIX     "")
+                            (SUFFIX     "|")
+                            (ORDERNO    10)
+                            (INCLUDE_IN_MSG    Y)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "FEEDBACK_CODE")
+                            (VALUE		 "")
+                            (PREFIX     "")
+                            (SUFFIX     "|")
+                            (ORDERNO    11)
+                            (INCLUDE_IN_MSG    Y)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "USER_ID")
+                            (VALUE		 "")
+                            (PREFIX     "")
+                            (SUFFIX     "|")
+                            (ORDERNO    12)
+                            (INCLUDE_IN_MSG    Y)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "PUT_APPLICATION_NAME")
+                            (VALUE		 "")
+                            (PREFIX     "")
+                            (SUFFIX     "|")
+                            (ORDERNO    13)
+                            (INCLUDE_IN_MSG    Y)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "PUT_APPLICATION_TYPE")
+                            (VALUE		 "")
+                            (PREFIX     "")
+                            (SUFFIX     "|")
+                            (ORDERNO    14)
+                            (INCLUDE_IN_MSG    Y)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "APPLICATION_IDENTITY_DATA")
+                            (VALUE		 "")
+                            (PREFIX     "")
+                            (SUFFIX     "|")
+                            (ORDERNO    15)
+                            (INCLUDE_IN_MSG    Y)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "APPLICATION_ORIGIN_DATA")
+                            (VALUE		 "")
+                            (PREFIX     "")
+                            (SUFFIX     "|")
+                            (ORDERNO    16)
+                            (INCLUDE_IN_MSG    Y)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "ACCOUNTING_TOKEN")
+                            (VALUE		 "")
+                            (PREFIX     "")
+                            (SUFFIX     "|")
+                            (ORDERNO    17)
+                            (INCLUDE_IN_MSG    Y)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "CORRELATION_ID")
+                            (VALUE		 "")
+                            (PREFIX     "")
+                            (SUFFIX     "|")
+                            (ORDERNO    18)
+                            (INCLUDE_IN_MSG    Y)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "GROUP_ID")
+                            (VALUE		 "")
+                            (PREFIX     "")
+                            (SUFFIX     "|")
+                            (ORDERNO    19)
+                            (INCLUDE_IN_MSG    Y)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "LOGICAL_SEQUENCE_NUMBER")
+                            (VALUE		 "")
+                            (PREFIX     "")
+                            (SUFFIX     "|")
+                            (ORDERNO    20)
+                            (INCLUDE_IN_MSG    Y)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "OFFSET")
+                            (VALUE		 "")
+                            (PREFIX     "")
+                            (SUFFIX     "|")
+                            (ORDERNO    21)
+                            (INCLUDE_IN_MSG    Y)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "MESSAGE_FLAGS")
+                            (VALUE		 "")
+                            (PREFIX     "")
+                            (SUFFIX     "|")
+                            (ORDERNO    22)
+                            (INCLUDE_IN_MSG    Y)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "MESSAGE_DATA_LENGTH")
+                            (VALUE		 "")
+                            (PREFIX     "")
+                            (SUFFIX     "|")
+                            (ORDERNO    23)
+                            (INCLUDE_IN_MSG    Y)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "FORMAT")
+                            (VALUE		 "")
+                            (PREFIX     "")
+                            (SUFFIX     "|")
+                            (ORDERNO    24)
+                            (INCLUDE_IN_MSG    Y)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "CODED_CHARACTER_SET_ID")
+                            (VALUE		 "")
+                            (PREFIX     "")
+                            (SUFFIX     "|")
+                            (ORDERNO    25)
+                            (INCLUDE_IN_MSG    Y)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "ENCODING")
+                            (VALUE		 "")
+                            (PREFIX     "")
+                            (SUFFIX     "|")
+                            (ORDERNO    26)
+                            (INCLUDE_IN_MSG    Y)
+                        )
+                    )
+                )
+            )
+            ("RJE-FQ-IP-1"  FILEQ
+                
+                (BUFFERSIZE  250000)
+                
+                (VALIDCHAR 1)
+                
+                (INTERFACE  LIB  "")
+                
+                (CONVERT   N)
+                
+                
+                
+                (FUNCTIONS
+                )
+                
+                (INFO
+                    (SERVERNAME  "jdbc:oracle:thin:@PELICANORACLE:1521:ORCL")
+                    (INSTITUTIONID    "ADCBAEAA")
+                    (PROCESSING_MODE   PROCESS)
+                    (FILEQ_COPY_TO_QUEUE   
+                    )
+                    (COPY_TO_QUEUE_COUNT    0)
+                    (COPY_STATUS       0)
+                    (FILEQ_BASE_DIR   "")
+                    (WRITE_TYPE   WRITE_ALL_OR_NONE)
+                    (FINAL_STATUS      79)
+                    (PROCESSING_ORDER   MESSAGE)
+                    (HEADER_SEPARATOR  "|")
+                    (AUTH_ERRFQ	   "IBAUTFQ")
+                    (SWIFTNET  N)
+                    (INPUTFQ          "CORPINFQ")
+                    (ERRORFQ          "CORPERFQ")
+                    (ERROR_FILE_DETAIL "[FNAME].err")
+                    (PROCESSEDFQ      "FLPROCDQ")
+                    (READ_STATUS       69)
+                    (FILE_NOT_PRESENT_STATUS 94)
+                    (ERROR_STATUS      69)
+                    (ORDER_BY         "")
+                    (ACTION_READ      "DEBULK")
+                    (SEQUENCE_NAME   "")
+                    (DEBULK  YES)
+                    (FILTER_TYPE    1)
+                    (MSGDELIMITER     "$")
+                    (MSGSTARTSTR      "")
+                    (MSGENDSTR        "")
+                )
+            )
+        )
+        (OUTSTREAMS 
+            ("DB-MAIN-FINAL-OP"  DB
+                
+                (BUFFERSIZE  250000)
+                
+                (VALIDCHAR 1)
+                
+                (INTERFACE  LIB  "")
+                
+                (CONVERT   N)
+                
+                
+                
+                (FUNCTIONS
+                )
+                
+                (INFO
+                    (DBTYPE  0)
+                    (VERSION  "")
+                    (SERVERNAME  "jdbc:oracle:thin:@PELICANORACLE:1521:ORCL")
+                    (MESSAGE_TYPE 0)
+                    (TOKENDELIMITER "")
+                    (TABLENAME   "")
+                    (COLUMNNAME  "")
+                    (QUERYSTRING "")
+                    (TRPROCESS  N)
+                    (STREAM_VARIABLE_TABLE
+                        (VARIABLE_INFO
+                            (NAME       "SEQUENCE_VAR")
+                            (TABLENAME  "DUAL")
+                            (COLUMNNAME "SEQUENCE_VAR")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    1)
+                            (INCLUDE_IN_MSG    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "DATE_VAR")
+                            (TABLENAME  "DUAL")
+                            (COLUMNNAME "DATE_VAR")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    2)
+                            (INCLUDE_IN_MSG    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "TIME_VAR")
+                            (TABLENAME  "DUAL")
+                            (COLUMNNAME "TIME_VAR")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    3)
+                            (INCLUDE_IN_MSG    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "DATE_VAR2")
+                            (TABLENAME  "DUAL")
+                            (COLUMNNAME "DATE_VAR2")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    4)
+                            (INCLUDE_IN_MSG    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "TIME_VAR2")
+                            (TABLENAME  "DUAL")
+                            (COLUMNNAME "TIME_VAR2")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    5)
+                            (INCLUDE_IN_MSG    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "ACE_QUEUE_ID")
+                            (TABLENAME  "DUAL")
+                            (COLUMNNAME "ACE_QUEUE_ID")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    7)
+                            (INCLUDE_IN_MSG    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "SEQ_NO")
+                            (TABLENAME  "DUAL")
+                            (COLUMNNAME "SEQ_NO")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    8)
+                            (INCLUDE_IN_MSG    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "OUTPUT_QID")
+                            (TABLENAME  "DUAL")
+                            (COLUMNNAME "OUTPUT_QID")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    10)
+                            (INCLUDE_IN_MSG    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "PREVQUEUEID")
+                            (TABLENAME  "MSGDB")
+                            (COLUMNNAME "QUEUEID")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    11)
+                            (INCLUDE_IN_MSG    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "CUSTOM5_PR_OLD")
+                            (TABLENAME  "MSGDB")
+                            (COLUMNNAME "CUSTOM5")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    13)
+                            (INCLUDE_IN_MSG    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "GV_AUTO_RP_MSG")
+                            (TABLENAME  "MSGBLOCKS")
+                            (COLUMNNAME "MESSAGE")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    14)
+                            (INCLUDE_IN_MSG    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "ACC_XML_REPONSE_MESSAGE")
+                            (TABLENAME  "MSGBLOCKS")
+                            (COLUMNNAME "MESSAGE")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    15)
+                            (INCLUDE_IN_MSG    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "CHARGE_XML_RESPONSE_MESSAGE")
+                            (TABLENAME  "MSGBLOCKS")
+                            (COLUMNNAME "MESSAGE")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    16)
+                            (INCLUDE_IN_MSG    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                    )
+                    (EXECUTE
+                        (QUERY "INSERT_INTO_GENAUDIT3" 27 "INSERT INTO GENAUDIT (MESSAGENO, AUDITDATETIME, SEQUENCENO, QUEUEID, APPLICATION, MODULENAME, ACTION,AUDITTEXT,INSTITUTIONID) VALUES (LPAD(@ACE_MESSAGE_NO,12,'0'), SYSDATE, @SEQ_NO, @QUEUEID, 'WFSVS01', DECODE(@MODULE1,'NULL',NULL,@MODULE1), DECODE(@ACTION1,'NULL',NULL,@ACTION1), DECODE(@AUDIT_TEXT1,'NULL',NULL,@AUDIT_TEXT1), @INSTITUTIONID)")
+                        (QUERY "INSERT_INTO_GENAUDIT4" 28 "INSERT INTO GENAUDIT (MESSAGENO, AUDITDATETIME, SEQUENCENO, QUEUEID, APPLICATION, MODULENAME, ACTION,AUDITTEXT,INSTITUTIONID) VALUES (LPAD(@ACE_MESSAGE_NO,12,'0'), SYSDATE, @SEQ_NO, @QUEUEID, 'WFSVS01', DECODE(@MODULE2,'NULL',NULL,@MODULE2), DECODE(@ACTION2,'NULL',NULL,@ACTION2), DECODE(@AUDIT_TEXT2,'NULL',NULL,@AUDIT_TEXT2), @INSTITUTIONID)")
+                        (QUERY "SELECT_MSGBLOCK_18" 6 "SELECT MESSAGE ACC_XML_REPONSE_MESSAGE FROM MSGBLOCKS WHERE MSGDB_ID = @MSGDBID AND MSGBLOCKTYPE = 18")
+                        (QUERY "UPDATE_MSGBLOCKS_3" 8 "UPDATE MSGBLOCKS SET MESSAGE=RAWTOHEX(@XML-REQUEST-CHARGES) WHERE MSGBLOCKS.MSGDB_ID=@MSGDBID AND MSGBLOCKTYPE=55")
+                        (QUERY "SELECT_MSGBLOCK_51" 17 "SELECT MESSAGE GV_AUTO_RP_MSG FROM MSGBLOCKS WHERE MSGBLOCKS.MSGDB_ID=@MSGDBID AND MSGBLOCKS.MSGBLOCKTYPE = 51")
+                        (QUERY "UPDATE_MSGDB_PAY" 21 "UPDATE MSGDB_PAY SET MDBPAY_CUSTACCNO=@ACCOUNTNUMBER,MDBPAY_BENEFNAME =DECODE(@BEN_CUST , 'NULL' , NULL , @BEN_CUST), MDBPAY_ORI_VAL_DT=TO_DATE(@VALUEDATE,'YYYYMMDD'), MDBPAY_ORI_VAL_AMT=@ORG_AMT1,MDBPAY_CHARGE_CODE=@ORG_CURR, MDBPAY_EXCH_RATE=@EXCG_RT_32_T_ACC,MDBPAY_BENF_TYPE = @ACCOUNT WHERE MSGDB_ID = @MSGDBID")
+                        (QUERY "UPDATE_MSGBLOCKS" 23 "UPDATE MSGBLOCKS SET MESSAGE=@OUT-MESSAGE WHERE MSGBLOCKS.MSGDB_ID=@MSGDBID AND MSGBLOCKTYPE=2")
+                        (QUERY "UPDATE_MSGBLOCKS1" 19 "UPDATE MSGBLOCKS SET MESSAGE = RAWTOHEX(@COMMENTS_SET_DB) WHERE MSGBLOCKS.MSGDB_ID=@MSGDBID AND MSGBLOCKTYPE = 6")
+                        (QUERY "UPDATE_MSGBLOCKS2" 18 "UPDATE MSGBLOCKS SET MESSAGE = DECODE(@GV_AUTO_RP_MSG:BLOB , NULL , @OUT-MESSAGE , @GV_AUTO_RP_MSG:BLOB ), MSGFAMILY = &apos;SWIFT&apos; WHERE MSGBLOCKS.MSGDB_ID=@MSGDBID AND MSGBLOCKTYPE = 51")
+                        (QUERY "UPDATE_MSGBLOCKS_6" 13 "UPDATE MSGBLOCKS SET MESSAGE=@XML-REQUEST-EXCH-CR:blob WHERE MSGBLOCKS.MSGDB_ID=@MSGDBID AND MSGBLOCKTYPE=59")
+                        (QUERY "UPDATE_MSGBLOCKS3" 20 "UPDATE MSGBLOCKS SET MESSAGE = RAWTOHEX(@FIRST_WARN) WHERE MSGBLOCKS.MSGDB_ID=@MSGDBID AND MSGBLOCKTYPE = 71")
+                        (QUERY "UPDATE_MSGBLOCK_4" 11 "UPDATE MSGBLOCKS SET MESSAGE=@XML-REQUEST-EXCH-DR:blob WHERE MSGBLOCKS.MSGDB_ID=@MSGDBID AND MSGBLOCKTYPE=57")
+                        (QUERY "UPDATE_MSGBLOCK_5" 12 "UPDATE MSGBLOCKS SET MESSAGE=@XML-RESPONSE-EXCH-DR:blob  WHERE MSGBLOCKS.MSGDB_ID=@MSGDBID AND MSGBLOCKTYPE=58")
+                        (QUERY "UPDATE_MSGBLOCKS_2" 7 "UPDATE MSGBLOCKS SET MESSAGE=DECODE(@XML-RESPONSE:BLOB,NULL,@ACC_XML_REPONSE_MES SAGE:blob,@XML-RESPONSE:BLOB)  WHERE MSGBLOCKS.MSGDB_ID=@MSGDBID AND MSGBLOCKTYPE=18")
+                        (QUERY "UPDATE_MSGBLOCK_6" 14 "UPDATE MSGBLOCKS SET MESSAGE=@XML-RESPONSE-EXCH-CR:blob WHERE MSGBLOCKS.MSGDB_ID=@MSGDBID AND MSGBLOCKTYPE=60")
+                        (QUERY "UPDATE_MSGBLOCK_7" 15 "UPDATE MSGBLOCKS SET MESSAGE=@XML-REQUEST-EXCH-DR-CHG:blob WHERE MSGBLOCKS.MSGDB_ID=@MSGDBID AND MSGBLOCKTYPE=61")
+                        (QUERY "UPDATE_MSGBLOCK_8" 16 "UPDATE MSGBLOCKS SET MESSAGE=@XML-RESPONSE-EXCH-DR-CHG:blob WHERE MSGBLOCKS.MSGDB_ID=@MSGDBID AND MSGBLOCKTYPE=62")
+                        (QUERY "UPDATE_MSGDB" 3 "UPDATE MSGDB SET QUEUEID = @GV_QUEUEID, STATUS= @STATUS, MESSAGECLASSTYPE =@MSG_MESSAGECLASSTYPE, SENDER = @MSG_SENDER, RECEIVER = @MSG_RECEIVER, CURRENCY = @CURRENCY, PRIORITYDATE =@VALUEDATE, PRIORITYAMOUNTNUM =@AMOUNT_NUM, PRIORITYAMOUNT = @AMOUNT, MESSAGEDIRECTION= @MESSAGE_DIRECTION, HASHCODE2= @NEW_CHK_SUM, CUSTOM44= @CUSTOM44, TRANSREFNO =@MSG_TRANSREFNO, COMMENTS = (DECODE(@COMMENTS,'NULL',NULL,@COMMENTS_FOR_BLOB6)), CUSTOM5 = (DECODE(@DUPL_FLAG,'Y', @CUSTOM5_DUPL, @CUSTOM5_PR)), DUPLICATE_RECORD_KEY = @DUPL_FLAG, CHANNEL_ID_TARGET = @CHANNEL_ID_TARGET, MSGSEGR = @MSG_SEGR, CHANNEL_RELEASE_MODE = 'AUTO' , CHANNEL_RELEASE_DATE = SYSDATE, BUSINESS_RECEIPT_DATE = SYSDATE WHERE MSGDB_ID = @MSGDBID")
+                        (QUERY "SELECT_MSGDBID" 1 "SELECT TO_CHAR(SYSDATE, 'YYYYMMDD') DATE_VAR, TO_CHAR(SYSDATE, 'HH24MISS') TIME_VAR,TO_CHAR(SYSTIMESTAMP, 'FF3') SEQ_NO FROM DUAL")
+                        (QUERY "UPDATE_MSGDB1" 4 "UPDATE MSGDB SET CUSTOM5 = @CUSTOM5_ORIG WHERE MSGDB_ID = @PARENT_MSGDB_ID")
+                        (QUERY "UPDATE_MSGBLOCKS_1" 5 "UPDATE MSGBLOCKS SET MESSAGE=RAWTOHEX(@XML-REQUEST) WHERE MSGBLOCKS.MSGDB_ID=@MSGDBID AND MSGBLOCKTYPE=54")
+                        (QUERY "UPDATE_MSGBLOCKS_8" 22 "UPDATE MSGBLOCKS SET MESSAGE=EMPTY_BLOB() WHERE MSGBLOCKS.MSGDB_ID=@MSGDBID AND MSGBLOCKS.MSGBLOCKTYPE=2")
+                        (QUERY "SELECT_MSGBLOCK_56" 9 "SELECT MESSAGE CHARGE_XML_RESPONSE_MESSAGE FROM MSGBLOCKS WHERE MSGDB_ID = @MSGDBID AND MSGBLOCKTYPE = 56")
+                        (QUERY "DELETE_FROM_GENAUDIT" 29 "DELETE FROM GENAUDIT WHERE MODULENAME IS NULL AND ACTION IS NULL AND GENAUDIT.MESSAGENO=@ACE_MESSAGE_NO")
+                        (QUERY "SELECT_MSGDB1" 2 "SELECT MSGDB_ID MSGDBID,CUSTOM5 CUSTOM5_PR FROM MSGDB WHERE QUEUEID = 'CRPMSGIN' AND MSGDB_ID=@MSGDBID AND STATUS IN (69,93,86) AND INSTANCEID =  @ACE_INSTANCE_ID")
+                        (QUERY "UPDATE_MSGBLOCKS_4" 10 "UPDATE MSGBLOCKS SET MESSAGE=DECODE(@XML-RESPONSE-CHARGES:blob ,NULL,@CHARGE_XML_RESPONSE_MESSAGE:blob,@XML-RESPONSE-CHARGES :blob) WHERE MSGBLOCKS.MSGDB_ID=@MSGDBID AND MSGBLOCKTYPE=56")
+                        (QUERY "INSERT_INTO_GENAUDIT" 24 "INSERT INTO GENAUDIT (MESSAGENO, AUDITDATETIME, SEQUENCENO, QUEUEID, APPLICATION, MODULENAME, ACTION,AUDITTEXT,INSTITUTIONID) VALUES (@ACE_MESSAGE_NO, SYSDATE, @SEQ_NO, @GV_QUEUEID, 'WFSVS01', 'WRKFLOW', 'TRANSLATE','Message is processed and written into '|| @GV_QUEUEID ||' Queue',@INSTITUTIONID)")
+                        (QUERY "INSERT_INTO_GENAUDIT1" 25 "INSERT INTO GENAUDIT (MESSAGENO, AUDITDATETIME, SEQUENCENO, QUEUEID, APPLICATION, MODULENAME, ACTION,AUDITTEXT,INSTITUTIONID) VALUES (LPAD(@ACE_MESSAGE_NO,12,'0'), SYSDATE, @SEQ_NO, @QUEUEID, 'WFSVS01', DECODE(@MODULE3,'NULL',NULL,@MODULE3), DECODE(@ACTION3,'NULL',NULL,@ACTION3), DECODE(@AUDIT_TEXT3,'NULL',NULL,@AUDIT_TEXT3), @INSTITUTIONID)")
+                        (QUERY "INSERT_INTO_GENAUDIT2" 26 "INSERT INTO GENAUDIT (MESSAGENO, AUDITDATETIME, SEQUENCENO, QUEUEID, APPLICATION, MODULENAME, ACTION,AUDITTEXT,INSTITUTIONID) VALUES (LPAD(@ACE_MESSAGE_NO,12,'0'), SYSDATE, @SEQ_NO, @QUEUEID, 'WFSVS01', DECODE(@MODULE4,'NULL',NULL,@MODULE4), DECODE(@ACTION4,'NULL',NULL,@ACTION4), DECODE(@AUDIT_TEXT4,'NULL',NULL,@AUDIT_TEXT4), @INSTITUTIONID)")
+                    )
+                    (ONSUCCESS
+                    )
+                    (ONERROR
+                        (QUERY "UPDATE_MSGDB"  1  "UPDATE MSGDB SET STATUS=69 , QUEUEID =  'CRPERR'  WHERE MSGDB_ID=@MSGDBID")
+                    )
+                    (ONROLLBACK
+                    )
+                    (ONCOMMIT
+                    )
+                    (ONSTREAMTRANSACTIONPHASETWOCOMMIT
+                    )
+                    (ONTRANSCOMMIT
+                    )
+                    (ONTRANSROLLBACK
+                    )
+                )
+            )
+            ("MSG-XT-DB-OP"  DB
+                
+                (BUFFERSIZE  11326)
+                
+                (VALIDCHAR 1)
+                
+                (INTERFACE  LIB  "")
+                
+                (CONVERT   N)
+                
+                
+                
+                (FUNCTIONS
+                )
+                
+                (INFO
+                    (DBTYPE  0)
+                    (VERSION  "")
+                    (SERVERNAME  "jdbc:oracle:thin:@PELICANORACLE:1521:orcl")
+                    (MESSAGE_TYPE 0)
+                    (TOKENDELIMITER "")
+                    (TABLENAME   "")
+                    (COLUMNNAME  "")
+                    (QUERYSTRING "")
+                    (TRPROCESS  N)
+                    (STREAM_VARIABLE_TABLE
+                        (VARIABLE_INFO
+                            (NAME       "SEQUENCE_VAR")
+                            (TABLENAME  "DUAL")
+                            (COLUMNNAME "SEQUENCE_VAR")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    1)
+                            (INCLUDE_IN_MSG    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "DATE_VAR")
+                            (TABLENAME  "DUAL")
+                            (COLUMNNAME "DATE_VAR")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    2)
+                            (INCLUDE_IN_MSG    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "TIME_VAR")
+                            (TABLENAME  "DUAL")
+                            (COLUMNNAME "TIME_VAR")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    3)
+                            (INCLUDE_IN_MSG    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "DATE_VAR2")
+                            (TABLENAME  "DUAL")
+                            (COLUMNNAME "DATE_VAR2")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    4)
+                            (INCLUDE_IN_MSG    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "TIME_VAR2")
+                            (TABLENAME  "DUAL")
+                            (COLUMNNAME "TIME_VAR2")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    5)
+                            (INCLUDE_IN_MSG    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "ACE_MESSAGE_NO")
+                            (TABLENAME  "DUAL")
+                            (COLUMNNAME "ACE_MESSAGE_NO")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    6)
+                            (INCLUDE_IN_MSG    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "ACE_QUEUE_ID")
+                            (TABLENAME  "DUAL")
+                            (COLUMNNAME "ACE_QUEUE_ID")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    7)
+                            (INCLUDE_IN_MSG    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "MSGDBID")
+                            (TABLENAME  "MSGDB")
+                            (COLUMNNAME "MSGDBID")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    8)
+                            (INCLUDE_IN_MSG    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "SEQ_NO")
+                            (TABLENAME  "DUAL")
+                            (COLUMNNAME "SEQ_NO")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    10)
+                            (INCLUDE_IN_MSG    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                    )
+                    (EXECUTE
+                        (QUERY "INSERT_MSGDB_PAY" 18 "INSERT INTO MSGDB_PAY (MSGDB_ID) VALUES (@SEQUENCE_VAR)")
+                        (QUERY "INSERT_MSGBLOCK1" 3 "INSERT INTO MSGBLOCKS (MSGDB_ID, MSGBLOCKTYPE, MESSAGE, MSGFAMILY) VALUES (@SEQUENCE_VAR, 1, @OUT-MESSAGE, 'SWIFT')")
+                        (QUERY "INSERT_MSGBLOCK3" 5 "INSERT INTO MSGBLOCKS (MSGDB_ID, MSGBLOCKTYPE) VALUES (@SEQUENCE_VAR, 6)")
+                        (QUERY "INSERT_MSGBLOCK10" 12 "INSERT INTO MSGBLOCKS (MSGDB_ID, MSGBLOCKTYPE, MSGFAMILY) VALUES (@SEQUENCE_VAR, 57, 'XML')")
+                        (QUERY "INSERT_MSGBLOCK5" 7 "INSERT INTO MSGBLOCKS (MSGDB_ID, MSGBLOCKTYPE) VALUES (@SEQUENCE_VAR, 71)")
+                        (QUERY "INSERT_MSGBLOCK11" 13 "INSERT INTO MSGBLOCKS (MSGDB_ID, MSGBLOCKTYPE, MSGFAMILY) VALUES (@SEQUENCE_VAR, 58, 'XML')")
+                        (QUERY "INSERT_MSGBLOCK7" 9 "INSERT INTO MSGBLOCKS (MSGDB_ID, MSGBLOCKTYPE, MSGFAMILY) VALUES (@SEQUENCE_VAR, 18, 'XML')")
+                        (QUERY "SELECT_FROM_DUAL" 1 "SELECT MSGDB_SEQ.NEXTVAL SEQUENCE_VAR, MSGDB_MESSAGENO.NEXTVAL ACE_MESSAGE_NO, TO_CHAR(SYSDATE, 'YYYYMMDD') DATE_VAR, TO_CHAR(SYSDATE, 'HH24MISS') TIME_VAR, TO_CHAR(SYSTIMESTAMP, 'FF3') SEQ_NO FROM DUAL")
+                        (QUERY "INSERT_MSGBLOCK9" 11 "INSERT INTO MSGBLOCKS (MSGDB_ID, MSGBLOCKTYPE, MSGFAMILY) VALUES (@SEQUENCE_VAR, 56, 'XML')")
+                        (QUERY "INSERT_MSGBLOCK12" 14 "INSERT INTO MSGBLOCKS (MSGDB_ID, MSGBLOCKTYPE, MSGFAMILY) VALUES (@SEQUENCE_VAR, 59, 'XML')")
+                        (QUERY "INSERT_INTO_GENAUDIT" 20 "INSERT INTO GENAUDIT (MESSAGENO, AUDITDATETIME, SEQUENCENO, QUEUEID, APPLICATION, MODULENAME, ACTION,AUDITTEXT,INSTITUTIONID) VALUES (LPAD(@ACE_MESSAGE_NO,12,'0'), SYSDATE, @SEQ_NO, @QUEUEID, 'WFSVS01', 'WRKFLOW', 'TRANSLATE','Message is read from MQ and inserted into '|| @QUEUEID ||' Queue',@INSTITUTION_ID)")
+                        (QUERY "INSERT_MSGBLOCK13" 15 "INSERT INTO MSGBLOCKS (MSGDB_ID, MSGBLOCKTYPE, MSGFAMILY) VALUES (@SEQUENCE_VAR, 60, 'XML')")
+                        (QUERY "INSERT_MSGBLOCK14" 16 "INSERT INTO MSGBLOCKS (MSGDB_ID, MSGBLOCKTYPE, MSGFAMILY) VALUES (@SEQUENCE_VAR, 61, 'XML')")
+                        (QUERY "INSERT_MSGBLOCK15" 17 "INSERT INTO MSGBLOCKS (MSGDB_ID, MSGBLOCKTYPE, MSGFAMILY) VALUES (@SEQUENCE_VAR, 62, 'XML')")
+                        (QUERY "INSERT_MSGBLOCK2" 4 "INSERT INTO MSGBLOCKS (MSGDB_ID, MSGBLOCKTYPE, MESSAGE, MSGFAMILY) VALUES (@SEQUENCE_VAR, 2, RAWTOHEX(@SWF_BLK), 'SWIFT')")
+                        (QUERY "INSERT_MSGBLOCK4" 6 "INSERT INTO MSGBLOCKS (MSGDB_ID, MSGBLOCKTYPE) VALUES (@SEQUENCE_VAR, 51)")
+                        (QUERY "INSERT_MSGBLOCK6" 8 "INSERT INTO MSGBLOCKS (MSGDB_ID, MSGBLOCKTYPE, MSGFAMILY) VALUES (@SEQUENCE_VAR, 54, 'XML')")
+                        (QUERY "INSERT_MSGBLOCK8" 10 "INSERT INTO MSGBLOCKS (MSGDB_ID, MSGBLOCKTYPE, MSGFAMILY) VALUES (@SEQUENCE_VAR, 55, 'XML')")
+                        (QUERY "SELECT_ACE_QUEUEID" 19 "SELECT LPAD(@ACE_MESSAGE_NO,12,'0'), @QUEUEID ACE_QUEUE_ID FROM DUAL")
+                        (QUERY "INSERT_INTO_MSGDB" 2 "INSERT INTO MSGDB (MSGDB_ID, QUEUEID, MESSAGENO, STATUS,INPUTDATE, INPUTTIME,  CURRQUEUEINDATE, CURRQUEUEINTIME, PRIORITY, LOCKSTATUS,NUMOFMESSAGES, INSTITUTIONID, MSGSEGR,MSG_FAMILY, MSG_MODE_IN, INSTANCEID, MESSAGECLASSTYPE, CUSTOM9, CHANNEL_ID_SOURCE, CHANNEL_ID_TARGET) VALUES (@SEQUENCE_VAR, @QUEUEID , LPAD(@ACE_MESSAGE_NO,12,'0'), 69, @DATE_VAR, @TIME_VAR, @DATE_VAR, @TIME_VAR, 5, 0,0, @INSTITUTION_ID, @MSGSEGR, DECODE(@GV_MESSAGE_CLASS_TYPE,'PAIN001','SEPA','SWIFT') ,@MSG_MODE_IN, @ACE_INSTANCE_ID, DECODE(@COV_MSG_TYPE , '202COV' ,@COV_MSG_TYPE , @GV_MESSAGE_CLASS_TYPE), LPAD(@ACE_MESSAGE_NO,12,'0'), @CHANNEL_ID_SOURCE, @CHANNEL_ID_TARGET)")
+                    )
+                    (ONSUCCESS
+                    )
+                    (ONERROR
+                        (QUERY "UPDATE_MSGDB"  1  "UPDATE MSGDB SET QUEUEID = 'CRPERR' WHERE MSGDB_ID = @MSGDBID AND INSTANCEID = @ACE_INSTANCE_ID")
+                    )
+                    (ONROLLBACK
+                    )
+                    (ONCOMMIT
+                    )
+                    (ONSTREAMTRANSACTIONPHASETWOCOMMIT
+                    )
+                    (ONTRANSCOMMIT
+                    )
+                    (ONTRANSROLLBACK
+                    )
+                )
+            )
+            ("UPDATE-ACK-NAK-STATUS"  DB
+                
+                (BUFFERSIZE  11325)
+                
+                (VALIDCHAR 1)
+                
+                (INTERFACE  LIB  "")
+                
+                (CONVERT   N)
+                
+                
+                
+                (FUNCTIONS
+                )
+                
+                (INFO
+                    (DBTYPE  0)
+                    (VERSION  "")
+                    (SERVERNAME  "jdbc:oracle:thin:@PELICANORACLE:1521:ORCL")
+                    (MESSAGE_TYPE 0)
+                    (TOKENDELIMITER "|")
+                    (TABLENAME   "")
+                    (COLUMNNAME  "")
+                    (QUERYSTRING "")
+                    (TRPROCESS  N)
+                    (STREAM_VARIABLE_TABLE
+                        (VARIABLE_INFO
+                            (NAME       "SEQ_NO")
+                            (TABLENAME  "DUAL")
+                            (COLUMNNAME "SEQ_NO")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    11)
+                            (INCLUDE_IN_MSG    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "SEQUENCE_VAR")
+                            (TABLENAME  "DUAL")
+                            (COLUMNNAME "SEQUENCE_VAR")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    1)
+                            (INCLUDE_IN_MSG    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "DATE_VAR")
+                            (TABLENAME  "DUAL")
+                            (COLUMNNAME "DATE_VAR")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    2)
+                            (INCLUDE_IN_MSG    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "TIME_VAR")
+                            (TABLENAME  "DUAL")
+                            (COLUMNNAME "TIME_VAR")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    3)
+                            (INCLUDE_IN_MSG    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "SEQUENCE_VAR2")
+                            (TABLENAME  "DUAL")
+                            (COLUMNNAME "SEQUENCE_VAR2")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    4)
+                            (INCLUDE_IN_MSG    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "DATE_VAR2")
+                            (TABLENAME  "DUAL")
+                            (COLUMNNAME "DATE_VAR2")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    5)
+                            (INCLUDE_IN_MSG    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "TIME_VAR2")
+                            (TABLENAME  "DUAL")
+                            (COLUMNNAME "TIME_VAR2")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    6)
+                            (INCLUDE_IN_MSG    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "MSGDB_ID")
+                            (TABLENAME  "MSGDB")
+                            (COLUMNNAME "MSGDB_ID")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    9)
+                            (INCLUDE_IN_MSG    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                        (VARIABLE_INFO
+                            (NAME       "CUSTOM5")
+                            (TABLENAME  "MSGDB")
+                            (COLUMNNAME "CUSTOM5")
+                            (PREFIX     "")
+                            (SUFFIX     "")
+                            (ORDERNO    10)
+                            (INCLUDE_IN_MSG    N)
+                            (TOKEN    0)
+                            (DATATYPE "TABLE")
+                            (TYPE     1)
+                        )
+                    )
+                    (EXECUTE
+                        (QUERY "SELECT_FROM_DUAL" 1 "SELECT TO_CHAR(SYSDATE, 'YYYYMMDD') DATE_VAR, TO_CHAR(SYSDATE, 'HH24MISS') TIME_VAR,TO_CHAR(SYSTIMESTAMP, 'FF3') SEQ_NO FROM DUAL")
+                        (QUERY "UPDATE_MT010_MSGDB" 3 "UPDATE MSGDB SET QUEUEID = DECODE(@MSGDB_ID , NULL , 'CRPUNMTH' , 'PROCDQ' ) ,STATUS = '79', INSTITUTIONID = DECODE(@MSGDB_ID , NULL , @INSTITUTION_ID, @INSTITUTIONID), MSGSEGR = DECODE(@MSGDB_ID , NULL , @MSGSEGR , @MSG_SEGR), MESSAGECLASSTYPE = DECODE(@MSG_TYPE,'NULL',NULL,@MSG_TYPE), COUNTRYCODE = DECODE(@SENDER_BIC_COUNTRY_CODE,'NULL',NULL, @SENDER_BIC_COUNTRY_CODE), COMMENTS = DECODE(@COMMENTS,'NULL',NULL,@COMMENTS),SENDER = DECODE(@SENDER_BIC,'NULL',NULL,@SENDER_BIC), RECEIVER = DECODE(@RECEIVER_BIC,'NULL',NULL,@RECEIVER_BIC), INPUTDATE = @DATE_VAR, INPUTTIME = @TIME_VAR, CURRQUEUEINDATE = @DATE_VAR, CURRQUEUEINTIME = @TIME_VAR, PRIORITY = 5, MESSAGEDIRECTION = 'O', CUSTOM5 =DECODE(@MSGDB_ID,NULL,'','PREV=' || @MSGDB_ID || '|ORIG?') WHERE MSGDB_ID = @MSGDBID AND INSTANCEID = @ACE_INSTANCE_ID")
+                        (QUERY "INSERT_GENAUDIT_1" 7 "INSERT INTO GENAUDIT (MESSAGENO, AUDITDATETIME, SEQUENCENO, QUEUEID, APPLICATION, MODULENAME, ACTION,AUDITTEXT,INSTITUTIONID) VALUES (DECODE(@MSGDB_ID , NULL , '' , LPAD(@ACE_MESSAGE_NO,12,'0')), SYSDATE, @SEQ_NO, DECODE(@MSGDB_ID , NULL , 'CRPUNMTH' , 'PROCDQ' ), @ACE_APPLICATION_ID, 'WRKFLOW', 'Wrote',@AUDIT2,@INSTITUTIONID)")
+                        (QUERY "INSERT" 6 "INSERT INTO GENAUDIT (MESSAGENO, AUDITDATETIME, SEQUENCENO, QUEUEID, APPLICATION, MODULENAME, ACTION,AUDITTEXT,INSTITUTIONID) VALUES (LPAD(@ACE_MESSAGE_NO,12,'0'), SYSDATE, @SEQ_NO, DECODE(@MSGDB_ID , NULL , 'CRPUNMTH' , 'PROCDQ' ), @ACE_APPLICATION_ID, 'WRKFLOW', 'Wrote','MT'|| @MSG_TYPE || ' message <' || @ACE_MESSAGE_NO || '>read from CRPMSGIN queue processed , and wrote to '|| DECODE(@MSGDB_ID , NULL , 'CRPUNMTH' , 'PROCDQ' ) ||' Queue',@INSTITUTIONID)")
+                        (QUERY "UPDATE_MSGDB_PAY" 4 "UPDATE MSGDB_PAY SET MDBPAY_BENF_TYPE = 'NONCUSTOMER' WHERE MSGDB_ID = @MSGDBID")
+                        (QUERY "INSERT_GENAUDIT_2" 8 "INSERT INTO GENAUDIT (MESSAGENO, AUDITDATETIME, SEQUENCENO, QUEUEID, APPLICATION, MODULENAME, ACTION,AUDITTEXT,INSTITUTIONID) VALUES (DECODE(@MSGDB_ID , NULL , '' , @MUR), SYSDATE, @SEQ_NO,'PROCDQ', @ACE_APPLICATION_ID, 'WRKFLOW', 'Wrote',@AUDIT3,@INSTITUTIONID)")
+                        (QUERY "SELECT_MSGDB_ID" 2 "SELECT MSGDB_ID MSGDB_ID, CUSTOM5 CUSTOM5, MSGSEGR MSG_SEGR, INSTITUTIONID INSTITUTIONID  FROM MSGDB WHERE QUEUEID = 'PROCDQ' AND (STATUS = @STATUS_ORG1 OR STATUS =DECODE(@STATUS_ORG2,'NULL','',@STATUS_ORG2)) AND CUSTOM9 = @MUR AND INSTANCEID = @ACE_INSTANCE_ID")
+                        (QUERY "UPDATE_CUSTOM5" 5 "UPDATE MSGDB SET CUSTOM5 = (CONCAT ((CONCAT ((CONCAT (@CUSTOM5 , 'NEXT=')), @MSGDBID)), (@LINKED-DETAILS))), STATUS = @ORG-MSG-UPDT WHERE MSGDB_ID =@MSGDB_ID AND INSTANCEID = @ACE_INSTANCE_ID")
+                    )
+                    (ONSUCCESS
+                    )
+                    (ONERROR
+                        (QUERY "SELECT_1"  1  "SELECT MSGDB_SEQ.NEXTVAL SEQUENCE_VAR2, TO_CHAR(SYSDATE, 'YYYYMMDD') DATE_VAR2, TO_CHAR(SYSDATE, 'HH24MISS') TIME_VAR2 FROM DUAL")
+                        (QUERY "SELECT_2"  4  "select 'I' || LPAD(@SEQUENCE_VAR,11,'0') ACE_MESSAGE_NO from dual")
+                        (QUERY "INSERT_1"  2  "INSERT INTO MSGDB (MSGDB_ID, QUEUEID, MESSAGENO, MESSAGECLASSTYPE, STATUS,INPUTDATE, INPUTTIME,  CURRQUEUEINDATE, CURRQUEUEINTIME, PRIORITY, LOCKSTATUS,NUMOFMESSAGES,MSG_MODE_IN, INSTITUTIONID, MESSAGEDIRECTION,TRANSREFNO, CURRENCY, PRIORITYDATE, PRIORITYAMOUNT, PRIORITYAMOUNTNUM, SENDER, RECEIVER, COMMENTS, CUSTOMER, CORRESPONDENT, COUNTRYCODE, CATEGORY, PAYMENTSYSTEM) VALUES (@SEQUENCE_VAR2, 'PAYERR', 'I' || LPAD(@SEQUENCE_VAR2,11,'0'), @GVAR.GV_MSGCLASSTYPE, 69, @DATE_VAR2, @TIME_VAR2, @DATE_VAR2, @TIME_VAR2, 5, 0,0,'SWIFT', @INSTITUTION_ID, 'O',@GVAR.GV_INBOUND_REF, @GVAR.GV_CURRENCY, @GVAR.GV_VALUE_DATE, @GVAR.GV_AMOUNT, @GVAR.GV_AMOUNT_NUM, @GVAR.GV_SENDER, @GVAR.GV_RECEIVER, decode (@MTBL.TransTable.TransErrorFlag, 'F', '', concat ('P20-1:A00:20-', @MTBL.TransTable.TransErrorCode)), @GVAR.GV_RECEIVER, @GVAR.GV_SENDER, @GVAR.GV_COUNTRY_CODE, 1, 'XXX')")
+                        (QUERY "SELECT_3"  5  "select 'PAYERR' ACE_QUEUE_ID from dual")
+                        (QUERY "INSERT_2"  3  "INSERT INTO MSGBLOCKS (MSGDB_ID, MSGBLOCKTYPE, MESSAGE, MSGFAMILY) VALUES (@SEQUENCE_VAR2, '1', @IN-MESSAGE, 'SWIFT')")
+                    )
+                    (ONROLLBACK
+                    )
+                    (ONCOMMIT
+                    )
+                    (ONSTREAMTRANSACTIONPHASETWOCOMMIT
+                    )
+                    (ONTRANSCOMMIT
+                    )
+                    (ONTRANSROLLBACK
+                    )
+                )
+            )
+        )
+    )
+    
+    (MSGSTREAMS 
+        
+        (TRANSENV "MT101_TO_MT103_TRANS"
+        
+			(INMSG  "PAYMSG-ENH"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "PAYMSG-ENH"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+		
+		)
+		
+		(TRANSENV "CLIEOP-INTRF-DD-TRANS"
+            
+            (INMSG  "CLIEOP-DETAIL-DIRECT-DEBIT"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "INTERFACE-MSG"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+        
+        (TRANSENV "ACH-PAIN001-TRANS"
+            
+            (INMSG  "ACH"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "CstmrCdtTrfInitn"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                    (PREPROCESSFN "RULE_GENERATE_END_TAGS")
+                )
+            )
+        )
+        
+        (TRANSENV "FX-XMLV2-TRANS"
+            
+            (INMSG  "FX_FIXLOAN_CONF"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "INTERFACE-MSG"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+        
+        (TRANSENV "CLIEOP-INTRF-TRANS"
+            
+            (INMSG  "CLIEOP-DETAIL-BUSI-PAY"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "INTERFACE-MSG"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+        
+        (TRANSENV "MT103-BTL91-TRANS"
+            
+            (INMSG  "PAYMSG-ENH"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "PAYMENT_MESSAGE_STD"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+        
+        (TRANSENV "PAYMSG-ENI-TRANS"
+            
+            (INMSG  "PAYMSG-ENH"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "EXCP-AND-INVSTG-MSG"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+        
+        (TRANSENV "DDMSG-XMLV2-TRANS"
+            
+            (INMSG  "DDMSG"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "INTERFACE-MSG"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+        
+        (TRANSENV "DBLK-DDMSG-TRANS"
+            
+            (INMSG  "DDMSG"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "DDMSG-O"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+        
+        (TRANSENV "PAIN001-TO-ACH-TRANS"
+            
+            (INMSG  "CstmrCdtTrfInitn"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "ACH"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+        
+        (TRANSENV "CAMT053-MT940-TRANS"
+            
+            (INMSG  "BKTOCSTMRSTMT"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "MT940"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+        
+        (TRANSENV "CAMT053-MT941-TRANS"
+            
+            (INMSG  "BKTOCSTMRSTMT"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "STATEMENT-MSG"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+        
+        (TRANSENV "CAMT053-MT942-TRANS"
+            
+            (INMSG  "BKTOCSTMRSTMT"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "MT942"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+        
+        (TRANSENV "COLLECTION_TO_ENI_TRANS"
+            
+            (INMSG  "DDMSG"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "EXCP-AND-INVSTG-MSG"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+        
+        (TRANSENV "KB-2014-MT300-O"
+            
+            (INMSG  "MT300-O"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "MT300-O"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+        
+        (TRANSENV "TRANS-CLIEOP-PAIN008-NEW"
+            
+            (INMSG  "INTERFACE-MSG"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "CstmrDrctDbtInitnV02"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+        
+        (TRANSENV "DDMSG-ENI-TRANS"
+            
+            (INMSG  "DDMSG"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "EXCP-AND-INVSTG-MSG"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+        
+        (TRANSENV "TRANS-CLIEOP-PAIN008"
+            
+            (INMSG  "INTERFACE-MSG"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "CstmrDrctDbtInitnV02"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+        
+        (TRANSENV "MT195-MT196-TRANS"
+            
+            (INMSG  "EXCP-AND-INVSTG-MSG"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "EXCP-AND-INVSTG-MSG"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+        
+        (TRANSENV "MT103-CLIEOP03-TRANS"
+            
+            (INMSG  "PAYMSG-ENH"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "CLIEOP-DETAIL-BUSI-PAY"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+        
+        (TRANSENV "TRANS-CLIEOP-PAIN001-NEW"
+            
+            (INMSG  "INTERFACE-MSG"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "CstmrCdtTrfInitn"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+        
+        (TRANSENV "MT940-CAMT053-TRANS"
+            
+            (INMSG  "MT940"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "BKTOCSTMRSTMT"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+        
+        (TRANSENV "MT941-CAMT053-TRANS"
+            
+            (INMSG  "STATEMENT-MSG"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "BKTOCSTMRSTMT"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+        
+        (TRANSENV "TRANS-OMS-USBANK"
+            
+            (INMSG  "OMS"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "US-BANK"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+        
+        (TRANSENV "MT942-CAMT053-TRANS"
+            
+            (INMSG  "MT942"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "BKTOCSTMRSTMT"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+        
+        (TRANSENV "ENI-ENI-TRANS"
+            
+            (INMSG  "EXCP-AND-INVSTG-MSG"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "EXCP-AND-INVSTG-MSG"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+        
+        (TRANSENV "TRANS-CLIEOP-PAIN001"
+            
+            (INMSG  "INTERFACE-MSG"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "CstmrCdtTrfInitn"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+        
+        (TRANSENV "DBLK-STMTMSG-TRANS"
+            
+            (INMSG  "STATEMENT-MSG"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "STATEMENT-MSG-P"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+        
+        (TRANSENV "CAMT054-CAMT053-TRANS"
+            
+            (INMSG  "BkToCstmrDbtCdtNtfctn"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "BkToCstmrStmt"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+        
+        (TRANSENV "CAMT053-CAMT054-TRANS"
+            
+            (INMSG  "BkToCstmrStmt"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "BkToCstmrDbtCdtNtfctn"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+        
+        (TRANSENV "FX_FIXLOAN-ENI-TRANS"
+            
+            (INMSG  "FX_FIXLOAN_CONF"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "EXCP-AND-INVSTG-MSG"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+        
+        (TRANSENV "MTN92-MTN99-TRANS"
+            
+            (INMSG  "EXCP-AND-INVSTG-MSG"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "EXCP-AND-INVSTG-MSG"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+        
+        (TRANSENV "PAYMSG-XMLV2-TRANS"
+            
+            (INMSG  "PAYMSG-ENH"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "INTERFACE-MSG"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+        
+        (TRANSENV "CUST-INIT-XMLV2-TRANS"
+            
+            (INMSG  "CustCTInitV02"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "INTERFACE-MSG"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+        
+        (TRANSENV "INTERFACE-TRANS-PAYMT"
+            
+            (INMSG  "INTERFACE-MSG"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "INTERFACE-MSG"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+        
+        (TRANSENV "KB-2014-MT300-I"
+            
+            (INMSG  "MT300-I"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "MT300-I"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+        
+        (TRANSENV "MT103-202-MT195-196-TRANS"
+            
+            (INMSG  "PAYMSG-ENH"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "EXCP-AND-INVSTG-MSG"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+        
+        (TRANSENV "CAMT053-CAMT052-TRANS"
+            
+            (INMSG  "BkToCstmrStmt"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "BkToCstmrAcctRpt"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+        
+        (TRANSENV "CAMT052-CAMT053-TRANS"
+            
+            (INMSG  "BkToCstmrAcctRpt"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "BkToCstmrStmt"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+        
+        (TRANSENV "EXCP-INVSTG-XMLV2-TRANS"
+            
+            (INMSG  "EXCP-AND-INVSTG-MSG"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "INTERFACE-MSG"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+        
+        (TRANSENV "SWIFTMSG-REBUILD-TRAN"
+            
+            (INMSG  "SWIFTMSG"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "SWIFTMSG"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+		;added by rajeshree
+        (TRANSENV "PACS008-TO-PAIN001-TRANS"
+            
+            (INMSG  "FITOFICSTMRCDTTRF"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "CSTMRCDTTRFINITN"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+        (TRANSENV "PAIN001-TO-PACS008-TRANS"
+            
+            (INMSG  "CstmrCdtTrfInitn"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "FIToFICstmrCdtTrf"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+		;end
+		;rajeshree
+		(TRANSENV "B2B-SEPACT-TO-STSRPT-TRAN"
+            
+            (INMSG  "CstmrCdtTrfInitn"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "CstmrPmtStsRpt"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+		(TRANSENV "TRANS_PACS008_TO_PACS004"
+            
+            (INMSG  "FIToFICstmrCdtTrf"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "PmtRtr"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+		;; Added by Shubham
+		(TRANSENV "CAMT55-PACS004-TRANS"
+            
+            (INMSG  "CstmrPmtCxlReq"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "PmtRtr"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+		
+		;; Added by Shubham
+		(TRANSENV "PACS004-CAMT55-TRANS"
+            
+            (INMSG  "PmtRtr"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "CstmrPmtCxlReq"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+		
+		;(TRANSENV "PAYMSG-REL-ENHCR"
+		(ENHCRENV "PAYMSG-REL-ENHCR"
+            
+            (INMSG  "PAYMSG"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "PAYMSG"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+		;end
+        (ENHCRENV "CHK-ENRICH-ENH"
+            
+            (INMSG  "US-BANK"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "US-BANK"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+        
+        (ENHCRENV "C2B-SEPA-SCT-ENH"
+            
+            (INMSG  "CSTMRCDTTRFINITN"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "CSTMRCDTTRFINITN"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+        
+        (ENHCRENV "MT942-INTRM-ENHCR"
+            
+            (INMSG  "MT942"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "MT942"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+        
+        (ENHCRENV "PAN-NAN-ENH"
+            
+            (INMSG  "MQ_MESSAGE"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "MQ_MESSAGE"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+        
+        (ENHCRENV "MT011-MT012-ENHCR"
+            
+            (INMSG  "GENERIC_MESSAGE"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "GENERIC_MESSAGE"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+        
+        (ENHCRENV "SCT-ENRICH-ENH"
+            
+            (INMSG  "CstmrCdtTrfInitn"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "CstmrCdtTrfInitn"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+        
+        (ENHCRENV "CAMT054-ENRICH-ENHCR"
+            
+            (INMSG  "INTERFACE-MSG_ACE-2009_1.0"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "INTERFACE-MSG_ACE-2009_1.0"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+        
+        (ENHCRENV "GENERIC_ENI_ENI_EHN"
+            
+            (INMSG  "EXCP-AND-INVSTG-MSG"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "EXCP-AND-INVSTG-MSG"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+        
+        (ENHCRENV "MT940-STMT-ENHCR"
+            
+            (INMSG  "MT940"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "MT940"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+        
+        (ENHCRENV "MT010-ACK-ENHCR"
+            
+            (INMSG  "MT010"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "MT010"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+        
+        (ENHCRENV "CHK-EXTRACT-ENH"
+            
+            (INMSG  "OMS"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "OMS"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+        
+        (ENHCRENV "INSTMSG-XTR-ENHCR"
+            
+            (INMSG  "PAYMSG-ENH"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "PAYMSG-ENH"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+        
+        (ENHCRENV "CAMT053-XT-ENHCR"
+            
+            (INMSG  "BKTOCSTMRSTMT"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "BKTOCSTMRSTMT"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+        
+        (ENHCRENV "SCT-ENRICH-ENHCR"
+            
+            (INMSG  "CstmrCdtTrfInitn"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "CstmrCdtTrfInitn"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+        
+        (ENHCRENV "MT019-MATCH-ENHCR"
+            
+            (INMSG  "MT019"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "MT019"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+        
+        (ENHCRENV "TREASURY-XTR-ENHCR"
+            
+            (INMSG  "FX_FIXLOAN_CONF"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "FX_FIXLOAN_CONF"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+        
+        (ENHCRENV "SDD-ENRICH-ENH"
+            
+            (INMSG  "CstmrDrctDbtInitnV02"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "CstmrDrctDbtInitnV02"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+        
+        (ENHCRENV "GENERIC-C2B-1-ENH"
+            
+            (INMSG  "CSTMRCDTTRFINITN"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "CSTMRCDTTRFINITN"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+        
+        (ENHCRENV "GENERIC-C2B-2-ENH"
+            
+            (INMSG  "CSTMRPMTSTSRPTV03"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "CSTMRPMTSTSRPTV03"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+        
+        (ENHCRENV "SDD-ENRICH-ENH_1"
+            
+            (INMSG  "CstmrDrctDbtInitnV02"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "CstmrDrctDbtInitnV02"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+        
+        (ENHCRENV "BAI2-ENRICH-ENH"
+            
+            (INMSG  "BTRS"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "BTRS"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+        
+        (ENHCRENV "GENERIC-C2B-7-ENH"
+            
+            (INMSG  "CSTMRPMTRVSLV02"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "CSTMRPMTRVSLV02"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+        
+        (ENHCRENV "INF-ENH-1"
+            
+            (INMSG  "MQ_MESSAGE"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "MQ_MESSAGE"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+        
+        (ENHCRENV "GENERIC-C2B-8-ENH"
+            
+            (INMSG  "CSTMRDRCTDBTINITNV02"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "CSTMRDRCTDBTINITNV02"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+        
+        (ENHCRENV "SDD-ENRICH-ENHCR"
+            
+            (INMSG  "CstmrDrctDbtInitnV02"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "CstmrDrctDbtInitnV02"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+        
+        (ENHCRENV "PAIN-XTR-ENHR"
+            
+            (INMSG  "CSTMRPMTSTSRPT"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "CSTMRPMTSTSRPT"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+        
+        (ENHCRENV "FILE-ROUTE-ENHCR"
+            
+            (INMSG  "FILEQ-MSG"  "RJE-FQ-IP-1"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "FILEQ-MSG"  "MSG-XT-DB-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+        
+        (ENHCRENV "ACH-ENRICH-ENH"
+            
+            (INMSG  "ACH"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "ACH"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+        
+        (ENHCRENV "DUMMY-WHITE-FLD-ENH"
+            
+            (INMSG  "CSTMRCDTTRFINITN"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "CSTMRCDTTRFINITN"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+        
+        (ENHCRENV "ACCEPT-XTR-ENHCR-DDMSG"
+            
+            (INMSG  "DDMSG"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "DDMSG"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+        
+        (ENHCRENV "ACK-NAK-ENH"
+            
+            (INMSG  "GENERIC_MESSAGE"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "GENERIC_MESSAGE"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+        
+        (ENHCRENV "ENI-IB-ACCPT-ENHCR"
+            
+            (INMSG  "EXCP-AND-INVSTG-MSG"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "EXCP-AND-INVSTG-MSG"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+        
+        (ENHCRENV "FIN-ACCEPT-ENHCR"
+            
+            (INMSG  "SWIFTMSG"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "SWIFTMSG"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+        
+        (ENHCRENV "ACH-EXTRACT-ENH"
+            
+            (INMSG  "ACH"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "ACH"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+        
+        (ENHCRENV "ACCEPT-XTR-STATEMENT-ENH"
+            
+            (INMSG  "STATEMENT-MSG"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "STATEMENT-MSG"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+        
+        (ENHCRENV "PAYMSG-SSI-ENHANCE"
+            
+            (INMSG  "PAYMSG"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "PAYMSG"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+        
+        (ENHCRENV "CAMT053-ENRICH-ENCHR"
+            
+            (INMSG  "BKTOCSTMRSTMT"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "BKTOCSTMRSTMT"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+        
+        (ENHCRENV "DEBULK-CRTTRXN-PAIN-ENHCR"
+            
+            (INMSG  "PMT-INIT"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "PMT-INIT"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+        
+        (ENHCRENV "CAMT052-ENRICH-ENHCR"
+            
+            (INMSG  "INTERFACE-MSG_ACE-2009_1.0"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "INTERFACE-MSG_ACE-2009_1.0"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+		;;added by eshan
+		(ENHCRENV "SCT-PACS-ENRICH-ENH"
+            
+            (INMSG  "FITOFICSTMRCDTTRF"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "FITOFICSTMRCDTTRF"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+		;ADDED BY BHUPESH FOR PACS003
+		(ENHCRENV "B2B-SDD-ENRICH-ENH"
+            
+            (INMSG  "FITOFICSTMRDRCTDBT"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "FITOFICSTMRDRCTDBT"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+		(ENHCRENV "FORMAT-DT-ENHCR"
+            
+            (INMSG  "PAYMSG-ENH"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "PAYMSG-ENH"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+		(ENHCRENV "FORMAT-DT-SEPA-ENHCR"
+            
+            (INMSG  "FITOFICSTMRCDTTRF"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "FITOFICSTMRCDTTRF"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+		;;added for camt
+		(ENHCRENV "CAMT055-XT-ENHCR"
+            
+            (INMSG  "CstmrPmtCxlReq"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "CstmrPmtCxlReq"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+		(ENHCRENV "CAMT055-ENH-ENHCR"
+            
+            (INMSG  "CstmrPmtCxlReq"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "CstmrPmtCxlReq"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+		;;added for camt029
+		(ENHCRENV "CAMT029-XT-ENHCR"
+            
+            (INMSG  "RsltnOfInvstgtn"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "RsltnOfInvstgtn"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+		(ENHCRENV "CAMT029-ENH-ENHCR"
+            
+            (INMSG  "RsltnOfInvstgtn"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "RsltnOfInvstgtn"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+		(TRANSENV "CAMT029-CAMT055-TRANS"
+            
+            (INMSG  "RsltnOfInvstgtn"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                     (POSTPROCESSFN "CHECK_COMPACT_XML")
+                )
+            )
+            
+            (OUTMSG  "CstmrPmtCxlReq"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+		(TRANSENV "CAMT055-CAMT029-TRANS"
+            
+            (INMSG  "CstmrPmtCxlReq"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+               (FUNCTIONS
+                     (POSTPROCESSFN "CHECK_COMPACT_XML")
+               )
+            )
+            
+            (OUTMSG  "RsltnOfInvstgtn"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+		(ENHCRENV "CAMT056-XT-ENHCR"
+            
+            (INMSG  "FIToFIPmtCxlReq"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "FIToFIPmtCxlReq"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+		(TRANSENV "PACS028-CAMT055-NEW-TRANS"
+            
+            (INMSG  "FIToFIPmtStsReq"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+               (FUNCTIONS
+                     (POSTPROCESSFN "CHECK_COMPACT_XML")
+               )
+            )
+            
+            (OUTMSG  "CstmrPmtCxlReq"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+		(TRANSENV "CAMT055--PACS028-TRANS"
+            
+            (INMSG  "CstmrPmtCxlReq"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+               (FUNCTIONS
+                     (POSTPROCESSFN "CHECK_COMPACT_XML")
+               )
+            )
+            
+            (OUTMSG  "FIToFIPmtStsReq"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+		(TRANSENV "CAMT055-PACS028-TRANS"
+            
+             (INMSG  "CstmrPmtCxlReq"  "DB-MAIN-IP"
+                
+                 (TRIGGERTRANS N)
+                
+                
+                 (FUNCTIONS
+                     (POSTPROCESSFN "CHECK_COMPACT_XML")
+                 )
+             )
+            
+             (OUTMSG  "FIToFIPmtStsReq"  "DB-MAIN-FINAL-OP"
+                
+                 (TRIGGERTRANS N)
+                
+                
+                 (FUNCTIONS
+                 )
+             )
+			
+         )
+		(TRANSENV "CAMT055-CAMT056-TRANS"
+            
+             (INMSG  "CstmrPmtCxlReq"  "DB-MAIN-IP"
+                
+                 (TRIGGERTRANS N)
+                
+                
+                 (FUNCTIONS
+                 )
+             )
+            
+             (OUTMSG  "FIToFIPmtCxlReq"  "DB-MAIN-FINAL-OP"
+                
+                 (TRIGGERTRANS N)
+                
+                
+                 (FUNCTIONS
+                 )
+             )
+         )
+		 (TRANSENV "CAMT056-CAMT055-TRANS"
+            
+             (INMSG  "FIToFIPmtCxlReq"  "DB-MAIN-IP"
+                
+                 (TRIGGERTRANS N)
+                
+                
+                 (FUNCTIONS
+                     (POSTPROCESSFN "CHECK_COMPACT_XML")
+                 )
+             )
+            
+             (OUTMSG  "CstmrPmtCxlReq"  "DB-MAIN-FINAL-OP"
+                
+                 (TRIGGERTRANS N)
+                
+                
+                 (FUNCTIONS
+                 )
+             )
+			
+         )
+		 (ENHCRENV "CAMT056-ENH-ENHCR"
+            
+            (INMSG  "FIToFIPmtCxlReq"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "FIToFIPmtCxlReq"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+		(ENHCRENV "PACS028-XT-ENHCR"
+            
+            (INMSG  "FIToFIPmtStsReq"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "FIToFIPmtStsReq"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+		(ENHCRENV "PACS028-ENH-ENHCR"
+            
+            (INMSG  "FIToFIPmtStsReq"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "FIToFIPmtStsReq"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+        )
+		(TRANSENV "MT103_TO_MT199_TRANS"
+        
+			(INMSG  "PAYMSG-ENH"  "DB-MAIN-IP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+            
+            (OUTMSG  "EXCP-AND-INVSTG-MSG"  "DB-MAIN-FINAL-OP"
+                
+                (TRIGGERTRANS N)
+                
+                
+                (FUNCTIONS
+                )
+            )
+		
+		)
+    )
+    
+    
+    
+)

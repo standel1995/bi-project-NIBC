@@ -1,0 +1,218 @@
+;Copyright 1995-2009 ACE Software Solutions. All rights reserved.
+; Library Rules file
+
+(FUNCTION DB_ALL_ENRICH_RULES_CT )
+
+(
+     (VAR VAL_TRANSACTION_SEQUENCE_BATCH)
+    (Assign VAL_TRANSACTION_SEQUENCE_BATCH (GetValueFromHeader GV_MSG_INPATH "STREAM_DETAILS" "TRANSACTION_SEQUENCE_BATCH"))
+
+    (IF (IsEqualString VAL_TRANSACTION_SEQUENCE_BATCH "1")
+        THEN
+                (
+                       ; (ENRICH_ULTMTDBTR_DB_CT)
+                         (ENRICH_PMTINFID_DB_CT) ;   BUG ID 555
+        )
+    )
+
+
+)
+
+(FUNCTION DB_ALL_ENRICH_RULES_DD )
+
+(
+        (VAR VAL_TRANSACTION_SEQUENCE_BATCH)
+    (Assign VAL_TRANSACTION_SEQUENCE_BATCH (GetValueFromHeader GV_MSG_INPATH "STREAM_DETAILS" "TRANSACTION_SEQUENCE_BATCH"))
+
+    (IF (IsEqualString VAL_TRANSACTION_SEQUENCE_BATCH "1")
+        THEN
+                (
+                        ;;BATCH LEVEL RULES
+                      ;  (ENRICH_ULTMTCDTR_DB_DD)
+                        (ENRICH_PMTINFID_DB_DD) ; BUG ID 555
+        )
+    )
+        
+        ;;TRANSACTON LEVEL RULES
+        (ENRICH_ULTMTDBTR_DB_DD)
+
+
+)
+
+(FUNCTION DB_ALL_TA_CT )
+
+(
+ (VAR START_OF_BATCH)
+ (Assign START_OF_BATCH (GETVALUEFROMHEADER GV_MSG_INPATH "GENERAL" "START_OF_BATCH"))
+
+    (IF (IsEqualString START_OF_BATCH "YES")
+        THEN
+          (
+                        ;;BATCH LEVEL RULES
+                        (ENRICH_ULTMTDBTR_DB_CT)
+                        (ENRICH_PMTINFID_DB_CT)
+                        (ENRICH_BTCHBOOKNG_DB_CT)
+           )            
+    )
+
+)
+
+(FUNCTION DB_ALL_TA_DD )
+
+(
+ (VAR START_OF_BATCH)
+ (Assign START_OF_BATCH (GETVALUEFROMHEADER GV_MSG_INPATH "GENERAL" "START_OF_BATCH"))
+
+    (IF (IsEqualString START_OF_BATCH "YES")
+        THEN
+          (
+                        ;;BATCH LEVEL RULES
+                        (ENRICH_ULTMTCDTR_DB_DD)
+                        (ENRICH_PMTINFID_DB_DD)
+           )            
+    )
+        
+        ;;TRANSACTON LEVEL RULES
+        (ENRICH_ULTMTDBTR_DB_DD)
+
+
+)
+
+(FUNCTION ENRICH_BTCHBOOKNG_DB_CT )
+
+(
+  (VAR BATCH_BOOKING)
+    (VAR BTCH_BOOKING_PATH)
+    (ASSIGN BTCH_BOOKING_PATH (String "OUT.CstmrCdtTrfInitn.PmtInf[0].BtchBookg"))
+
+    ;;BATCH BOOKING VALUE 
+    (ASSIGN BATCH_BOOKING (MemTblGetTableValue "ONBOARD_INST" "BTCHBOOK_DB_CT"))
+    (IF (ISPRESENT BATCH_BOOKING)
+        THEN
+           (SETINDIRECT BTCH_BOOKING_PATH BATCH_BOOKING)
+    )
+
+
+
+)
+
+(FUNCTION ENRICH_PMTINFID_DB_CT )
+
+(
+    (VAR PMTINFID_PATH)
+        (VAR PMTINFID_LEN)
+        (VAR PMTINFID_NEW)
+        (VAR PMTINFID)
+                (VAR EXTRACTPOSITION)
+
+    (Assign PMTINFID_PATH (String "OUT.CstmrCdtTrfInitn.PmtInf[0].PmtInfId"))    
+    ;(Assign PMTINFID_LEN (StrLen PMTINFID_PATH))
+        (Assign PMTINFID     (GETINDIRECT PMTINFID_PATH ))
+        (ASSIGN PMTINFID_LEN (LENGTH PMTINFID))
+                (IF(IsGreaterThan PMTINFID_LEN "20")
+                THEN
+                        (
+                               ; (Assign PMTINFID_NEW(Strsub PMTINFID 1 20) )
+                                 (ASSIGN EXTRACTPOSITION (- PMTINFID_LEN 19))
+                                 (ASSIGN PMTINFID_NEW (Substr PMTINFID EXTRACTPOSITION 20))
+                                 (SetIndirect PMTINFID_PATH PMTINFID_NEW)
+                                 (SETVALUETOHEADER GV_MSG_OUTPATH "STREAM_DETAILS" "PMTINFID" PMTINFID_NEW)
+                        )
+                )
+
+
+)
+
+(FUNCTION ENRICH_PMTINFID_DB_DD )
+
+(
+    (VAR PMTINFID_PATH)
+        (VAR PMTINFID_LEN)
+        (VAR PMTINFID_NEW)
+        (VAR PMTINFID)
+                (VAR EXTRACTPOSITION)
+
+    (Assign PMTINFID_PATH (String "OUT.CstmrDrctDbtInitnV02.PmtInf[0].PmtInfId"))    
+    ;(Assign PMTINFID_LEN (StrLen PMTINFID_PATH))
+        (Assign PMTINFID  (GETINDIRECT PMTINFID_PATH ))
+        (ASSIGN PMTINFID_LEN (LENGTH PMTINFID))
+                (IF(IsGreaterThan PMTINFID_LEN "20")
+                THEN
+                        (
+                             ;   (Assign PMTINFID_NEW (Strsub PMTINFID 1 20))
+                                (ASSIGN EXTRACTPOSITION (- PMTINFID_LEN 19))
+                                (ASSIGN PMTINFID_NEW (Substr PMTINFID EXTRACTPOSITION 20))
+                               (SetIndirect PMTINFID_PATH PMTINFID_NEW)
+                                (SETVALUETOHEADER GV_MSG_OUTPATH "STREAM_DETAILS" "PMTINFID" PMTINFID_NEW)
+                        )
+                )
+
+
+
+)
+
+(FUNCTION ENRICH_ULTMTCDTR_DB_DD  )
+
+(
+    (VAR PATH_PMTINF_ULTMTCDTR)
+        (VAR GETVAL_ULTMTCDTR)
+        (VAR UTLMTCDTR_LEN)
+    
+    ;;BATCH LEVEL ULTIMATE CREDITOR VALUE
+    (ASSIGN PATH_PMTINF_ULTMTCDTR (STRING "OUT.CstmrDrctDbtInitnV02.PmtInf[0].UltmtCdtr[0].Nm"))
+    (ASSIGN GETVAL_ULTMTCDTR (GETINDIRECT PATH_PMTINF_ULTMTCDTR))
+        (ASSIGN UTLMTCDTR_LEN (LENGTH GETVAL_ULTMTCDTR))
+        
+    (IF (IsGreaterThan UTLMTCDTR_LEN 70)
+        THEN
+                (
+            (SETINDIRECT PATH_PMTINF_ULTMTCDTR (StrSub GETVAL_ULTMTCDTR 1 70)) 
+                )
+        )
+
+
+)
+
+(FUNCTION ENRICH_ULTMTDBTR_DB_CT  )
+
+(
+    (VAR PATH_ULTMTDBTR)
+        (VAR GETVAL_ULTMTDBTR)
+        (VAR UTLMTDBTR_LEN)
+    
+    ;;TRANSACTION LEVEL ULTIMATE DEBITOR VALUE
+        (ASSIGN PATH_ULTMTDBTR (STRING "OUT.CstmrCdtTrfInitn.PmtInf[0].CdtTrfTxInf[0].UltmtDbtr[0].Nm"))
+    (ASSIGN GETVAL_ULTMTDBTR (GETINDIRECT PATH_ULTMTDBTR))
+        (ASSIGN UTLMTDBTR_LEN (LENGTH GETVAL_ULTMTDBTR))
+        
+    (IF (IsGreaterThan UTLMTDBTR_LEN 70)
+        THEN
+                (
+                        (SETINDIRECT PATH_ULTMTDBTR (StrSub GETVAL_ULTMTDBTR 1 70))
+                )
+        )
+
+
+)
+
+(FUNCTION ENRICH_ULTMTDBTR_DB_DD  )
+
+(
+    (VAR PATH_ULTMTDBTR)
+        (VAR GETVAL_ULTMTDBTR)
+        (VAR UTLMTDBTR_LEN)
+    
+    ;;TRANSACTION LEVEL ULTIMATE DEBITOR VALUE
+        (ASSIGN PATH_ULTMTDBTR (STRING "OUT.CstmrDrctDbtInitnV02.PmtInf[0].DrctDbtTxInf[0].UltmtDbtr[0].Nm"))
+    (ASSIGN GETVAL_ULTMTDBTR (GETINDIRECT PATH_ULTMTDBTR))
+        (ASSIGN UTLMTDBTR_LEN (LENGTH GETVAL_ULTMTDBTR))
+        
+    (IF (IsGreaterThan UTLMTDBTR_LEN 70)
+        THEN
+                (
+                        (SETINDIRECT PATH_ULTMTDBTR (StrSub GETVAL_ULTMTDBTR 1 70))  
+                )
+        )
+
+)
+
